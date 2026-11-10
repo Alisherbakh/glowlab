@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "language": "en",
+  "note": "Curated skin care knowledge base for GlowLab RAG. Every chunk paraphrases one public page; the URL is shown to the user as the source. Not medical advice.",
+  "chunks": [
+    {
+      "id": "sunscreen-basics",
+      "title": "Choosing and applying sunscreen",
+      "text": "Dermatologists recommend a broad-spectrum, water-resistant sunscreen with SPF 30 or higher. Use about 1 ounce for the body and at least 1 teaspoon for the face. Apply it about 15 minutes before going outside so it can protect the skin. Sunscreen should be used even on cloudy days, because up to 80% of the sun's UV rays can pass through clouds.",
+      "sourceTitle": "AAD: 5 common sunscreen mistakes",
+      "url": "https://www.aad.org/public/everyday-care/sun-protection/shade-clothing-sunscreen/common-sunscreen-mistakes"
+    },
+    {
+      "id": "sunscreen-reapply",
+      "title": "Reapplying sunscreen and other sun protection",
+      "text": "Reapply sunscreen about every 2 hours, and right after swimming or sweating. Throw away sunscreen that has passed its expiration date. Sunscreen alone is not enough: also seek shade, wear protective clothing such as a wide-brimmed hat and sunglasses, and consider clothing with a UPF label.",
+      "sourceTitle": "AAD: 5 common sunscreen mistakes",
+      "url": "https://www.aad.org/public/everyday-care/sun-protection/shade-clothing-sunscreen/common-sunscreen-mistakes"
+    },
+    {
+      "id": "patch-test",
+      "title": "How to test a new skin care product (patch test)",
+      "text": "Before using a new product on your face, test it: apply a quarter-sized amount to the underside of the arm or the bend of the elbow twice a day for 7 to 10 days. For rinse-off products such as cleansers, leave the product on for about 5 minutes before rinsing. Some irritation from retinol or glycolic acid can be normal and temporary. If you have a reaction, wash the product off, stop using it, and soothe the skin with a cool compress or petroleum jelly. See a board-certified dermatologist if the reaction is severe.",
+      "sourceTitle": "AAD: How to test skin care products",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-secrets/prevent-skin-problems/test-skin-care-products"
+    },
+    {
+      "id": "face-washing",
+      "title": "How to wash your face",
+      "text": "Use a gentle, non-abrasive cleanser that does not contain alcohol. Wet the face with lukewarm water (warm, never hot) and apply the cleanser with your fingertips; washcloths, mesh sponges and other tools can irritate the skin. Do not scrub. Rinse with lukewarm water and gently pat dry with a soft towel. Apply moisturizer if the skin is dry or itchy, and be gentle around the eyes.",
+      "sourceTitle": "AAD: Face washing 101",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/care/face-washing-101"
+    },
+    {
+      "id": "face-washing-frequency",
+      "title": "How often to wash your face",
+      "text": "Wash your face no more than twice a day, in the morning and at night, and again after heavy sweating. Wash as soon as you can after sweating, because perspiration, especially under a hat or helmet, irritates the skin. For ongoing skin concerns, see a board-certified dermatologist.",
+      "sourceTitle": "AAD: Face washing 101",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/care/face-washing-101"
+    },
+    {
+      "id": "retinoid-what",
+      "title": "What retinoids and retinol are",
+      "text": "Retinoids are vitamin A-based products. Tretinoin, a prescription retinoid, helps prevent clogged pores, speeds surface skin cell turnover and boosts collagen, which can improve skin tone and reduce fine lines. Adapalene is available for acne both by prescription and over the counter. Retinol is an over-the-counter retinoid used to improve uneven skin tone, pigmentation and texture. Retinoid products can suit mild acne, mild pigmentation or mild fine lines; people with skin allergies or dryness are probably not good candidates. Retinoids should not be used during pregnancy.",
+      "sourceTitle": "AAD: Retinoid or retinol?",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-secrets/anti-aging/retinoid-retinol"
+    },
+    {
+      "id": "retinoid-how",
+      "title": "How to start using a retinoid",
+      "text": "Start with the least intense formula you can find, because strong retinoids can irritate the skin. Use it every other night at first and build up slowly, together with a moisturizer. Over-the-counter labels do not have to show the retinol percentage, so choose the lowest strength available. Use retinoids only at night because they increase sun sensitivity; during the day seek shade, wear protective clothing and apply sunscreen. People with darker skin should watch closely for irritation, which can trigger dark marks. Talk to a dermatologist before starting if you are unsure.",
+      "sourceTitle": "AAD: Retinoid or retinol?",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-secrets/anti-aging/retinoid-retinol"
+    },
+    {
+      "id": "dry-skin-bathing",
+      "title": "Dry skin: bathing and moisturizing",
+      "text": "To relieve dry skin, limit baths and showers to 5 to 10 minutes with warm water, and pat the skin dry instead of rubbing. Use a small amount of gentle cleanser only where needed. Apply moisturizer right after bathing while the skin is still damp, after washing hands, and whenever the skin feels dry. Creams and ointments are better than lotions for dry skin. A humidifier, cleaned regularly, can help, especially in the bedroom at night.",
+      "sourceTitle": "AAD: Dermatologists' top tips for relieving dry skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/dermatologists-tips-relieve-dry-skin"
+    },
+    {
+      "id": "dry-skin-ingredients",
+      "title": "Dry skin: ingredients to look for and avoid",
+      "text": "For dry skin, choose fragrance-free products; 'unscented' products may still contain masking chemicals. Helpful moisturizer ingredients include jojoba oil, dimethicone, glycerin, hyaluronic acid, lactic acid, lanolin, mineral oil, petrolatum and shea butter. Avoid products with alcohol (except hand sanitizer), fragrance and retinoids when the skin is dry. If dry skin continues despite these steps, see a board-certified dermatologist, because it can be linked to conditions such as atopic dermatitis or psoriasis.",
+      "sourceTitle": "AAD: Dermatologists' top tips for relieving dry skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/dermatologists-tips-relieve-dry-skin"
+    },
+    {
+      "id": "oily-skin-care",
+      "title": "Oily skin: cleansing and products",
+      "text": "With oily skin, cleanse up to twice a day and after sweating, using a gentle foaming face wash; harsh washes can irritate the skin and increase oil production. Do not scrub. Avoid oil-based and alcohol-based cleansers. Choose products labeled 'oil free' and 'noncomedogenic'. Salicylic, glycolic and lactic acids can reduce oiliness but may be too harsh, so reduce or stop them if irritation occurs. Apply a moisturizer after cleansing, ideally one with broad-spectrum SPF 30 or higher.",
+      "sourceTitle": "AAD: How to control oily skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin"
+    },
+    {
+      "id": "oily-skin-habits",
+      "title": "Oily skin: makeup, blotting and habits",
+      "text": "For oily skin, use oil-free, water-based makeup; products labeled 'matte' can reduce shine. Remove all makeup before sleeping. Blotting papers help: press them gently on the face for a few seconds without rubbing, since rubbing spreads oil. Avoid touching the face during the day except to cleanse or apply products, and wash your hands first. Outdoors, choose a fragrance-free, oil-free sunscreen with zinc oxide or titanium dioxide. See a dermatologist if oil, blackheads or acne are a concern.",
+      "sourceTitle": "AAD: How to control oily skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin"
+    },
+    {
+      "id": "moisturizer-by-type",
+      "title": "Choosing a moisturizer for your skin type",
+      "text": "Dry skin does best with a cream or ointment rather than a lotion, applied right after showering while the skin is damp. People with oily skin may skip moisturizer or use a gel, because too much moisturizer can clog pores. With combination skin, moisturize the dry areas and skip the oily ones, often the T-zone. Lotion is usually enough for younger people with normal skin and seasonal dryness, while people in perimenopause and everyone 50 and older may benefit from a cream. Ceramides help hydrate skin and hyaluronic acid is known for intense moisturizing.",
+      "sourceTitle": "AAD: How to pick the right moisturizer for your skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/pick-moisturizer"
+    },
+    {
+      "id": "sensitive-skin-moisturizer",
+      "title": "Moisturizers for sensitive skin",
+      "text": "People with sensitive skin should avoid fragrance and be careful with 'organic' skin care lines, whose plant ingredients can aggravate allergies. For very dry or sensitive skin, a fragrance-free cleanser and a non-comedogenic moisturizer used at least twice a day can help. Dermatologists suggest avoiding products with alcohol, alpha hydroxy acids (AHAs) and fragrance in a moisturizer. Sunscreen with SPF 30 or higher every day is described as the number one anti-aging treatment.",
+      "sourceTitle": "AAD: How to pick the right moisturizer for your skin",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/dry/pick-moisturizer"
+    },
+    {
+      "id": "acne-patience",
+      "title": "Acne: give treatments time and cover the whole area",
+      "text": "Do not switch acne products every week. Use a treatment for 6 to 8 weeks before judging whether it works; complete clearing generally takes 3 to 4 months. Apply a thin, even layer of acne medication over all acne-prone skin, not only on visible blemishes. Use treatments as directed and do not dry the skin out with astringents or rubbing alcohol; a moisturizer made for acne-prone skin, applied after washing, helps.",
+      "sourceTitle": "AAD: 10 skin care habits that can worsen acne",
+      "url": "https://www.aad.org/diseases/acne/10-skin-care-habits-worsen-acne"
+    },
+    {
+      "id": "acne-habits",
+      "title": "Acne: habits to avoid",
+      "text": "Habits that can worsen acne include using makeup or skin products that clog pores (choose 'non-comedogenic' or 'won't clog pores'), sharing makeup or brushes, sleeping in makeup, washing the face many times a day, scrubbing the skin, rubbing sweat away roughly, and popping or squeezing pimples. Wash twice a day and after sweating, gently with fingertips, rinse with warm water and pat dry. People with deep or painful acne should see a dermatologist.",
+      "sourceTitle": "AAD: 10 skin care habits that can worsen acne",
+      "url": "https://www.aad.org/diseases/acne/10-skin-care-habits-worsen-acne"
+    },
+    {
+      "id": "rosacea-triggers",
+      "title": "Common rosacea triggers",
+      "text": "Common rosacea flare triggers include sunlight, stress, overheating (hot baths, hot weather), hot drinks, alcohol (red wine especially), spicy foods, wind and cold, intense exercise, waterproof makeup and heavy foundations, and skin or hair products containing menthol, camphor or sodium lauryl sulfate. Some medicines can also trigger flushing, but never stop a medicine on your own; ask the prescribing doctor. A dermatologist can create a personal treatment plan.",
+      "sourceTitle": "AAD: Rosacea triggers",
+      "url": "https://www.aad.org/public/diseases/rosacea/triggers/prevent"
+    },
+    {
+      "id": "rosacea-skin-care",
+      "title": "Skin care for rosacea-prone skin",
+      "text": "For rosacea, choose products without alcohol, camphor, fragrance, glycolic acid, lactic acid, menthol, sodium lauryl sulfate or urea, and prefer 'fragrance-free' over 'unscented'. Never use an astringent or toner. Test products before using them on the face. Cleanse twice a day with a mild cleanser (not soap), rinse with warm water and pat dry, then apply a rosacea-friendly moisturizer. Use broad-spectrum, water-resistant SPF 30+ year-round; a fragrance-free mineral sunscreen may irritate less. A green-tinted concealer can camouflage redness.",
+      "sourceTitle": "AAD: Rosacea skin care tips dermatologists give their patients",
+      "url": "https://www.aad.org/public/diseases/acne-and-rosacea/rosacea/6-rosacea-skin-care-tips-dermatologists-give-their-patients"
+    },
+    {
+      "id": "dark-spots-ingredients",
+      "title": "Fading dark spots: sunscreen and ingredients",
+      "text": "To fade dark spots, protect the skin every day with a broad-spectrum, water-resistant SPF 30+ sunscreen; a tinted sunscreen containing iron oxide also blocks visible light, which can cause dark spots. Reapply about every two hours. Over-the-counter ingredients that can help include azelaic acid, glycolic acid, kojic acid, retinoids (retinol, adapalene) and vitamin C. Treating the underlying cause, such as acne or eczema, also helps spots fade.",
+      "sourceTitle": "AAD: How to fade dark spots",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-secrets/routine/fade-dark-spots"
+    },
+    {
+      "id": "dark-spots-time",
+      "title": "Fading dark spots: how long it takes and what to avoid",
+      "text": "Dark spots a few shades darker than the skin usually fade within 6 to 12 months; deeper, slate blue to gray discoloration can take years. Never use liquid bleach on the skin, and avoid imported products that may contain hidden steroids or mercury. Stop any product that burns or stings. If over-the-counter treatments do not help, a dermatologist can prescribe stronger treatments.",
+      "sourceTitle": "AAD: How to fade dark spots",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-secrets/routine/fade-dark-spots"
+    },
+    {
+      "id": "melanoma-abcde",
+      "title": "Warning signs of melanoma (ABCDE)",
+      "text": "The ABCDEs of melanoma: A — asymmetry (the two halves do not match); B — border that is uneven, scalloped or notched; C — several colors; D — diameter of about 6 mm (a pencil eraser) or larger, or a spot darker than the others; E — evolving: any change in size, shape, color or elevation, or new bleeding, itching or crusting. A spot that looks different from your other moles (the 'ugly duckling') is also a warning sign. See a dermatologist promptly for anything new, changing or unusual. GlowLab cannot check moles.",
+      "sourceTitle": "Skin Cancer Foundation: Melanoma warning signs",
+      "url": "https://www.skincancer.org/skin-cancer-information/melanoma/melanoma-warning-signs-and-images/"
+    },
+    {
+      "id": "aha-sun",
+      "title": "Alpha hydroxy acids (AHAs) and sun sensitivity",
+      "text": "AHAs such as glycolic acid and lactic acid exfoliate the skin. In an FDA-cited study, four weeks of AHA use increased sensitivity to UV reddening by about 18%, and the effect went away about one week after stopping. FDA recommends a sunburn alert: use sunscreen, wear protective clothing and limit sun exposure while using an AHA product and for a week afterwards. An expert panel considered glycolic and lactic acid safe in consumer products at 10% or less with a pH of 3.5 or higher, with daily sun protection.",
+      "sourceTitle": "FDA: Alpha hydroxy acids",
+      "url": "https://www.fda.gov/cosmetics/cosmetic-ingredients/alpha-hydroxy-acids"
+    },
+    {
+      "id": "bha-salicylic",
+      "title": "Beta hydroxy acid (salicylic acid) precautions",
+      "text": "Salicylic acid is the beta hydroxy acid (BHA) most often used in cosmetics. FDA suggests these precautions for BHA products: test on a small area first; stop and consult a doctor if irritation or prolonged stinging occurs; follow the label and do not use more often than directed; avoid BHA products on infants and children; and use sun protection while using them.",
+      "sourceTitle": "FDA: Beta hydroxy acids",
+      "url": "https://www.fda.gov/cosmetics/cosmetic-ingredients/beta-hydroxy-acids"
+    },
+    {
+      "id": "cosmetic-shelf-life",
+      "title": "Cosmetic shelf life and expiration",
+      "text": "In the United States, cosmetics are not required to have an expiration date; manufacturers decide shelf life. Products can spoil because fingers and applicators bring in bacteria, preservatives break down, and heat, sunlight and air change them. Eye-area products have shorter shelf lives; manufacturers usually recommend replacing mascara 2 to 4 months after purchase. Throw away dried-out mascara and never add water or saliva. Do not share makeup, use a fresh applicator for store testers, and keep cosmetics away from heat such as a hot car.",
+      "sourceTitle": "FDA: Shelf life and expiration dating of cosmetics",
+      "url": "https://www.fda.gov/cosmetics/cosmetics-labeling/shelf-life-and-expiration-dating-cosmetics"
+    },
+    {
+      "id": "ingredient-order",
+      "title": "How to read a cosmetic ingredient list",
+      "text": "On U.S. cosmetic labels, ingredients must be listed in descending order of predominance, from the largest amount to the smallest. Ingredients present at 1% or less and color additives may be listed in any order after that. Ingredients accepted by FDA as trade secrets may appear as 'and other ingredients'. So the first few ingredients usually make up most of the product.",
+      "sourceTitle": "FDA: Summary of cosmetics labeling requirements",
+      "url": "https://www.fda.gov/cosmetics/labeling-regulations/summary-labeling-requirements"
+    },
+    {
+      "id": "routine-order",
+      "title": "A simple daily routine and product order",
+      "text": "A simple routine: wash with a gentle cleanser that matches your skin type twice a day and after sweating. In the morning, a vitamin C serum can be applied after washing and before sunscreen. Sunscreen (broad-spectrum, water-resistant, SPF 30+) goes on last, after other skin care and under makeup, about 15 minutes before going out. A retinoid is applied at night, 20 to 30 minutes after washing. Give a new product at least 30 days, stop anything that irritates, and avoid switching products too often.",
+      "sourceTitle": "AAD: Dermatologist-recommended skin care for your 20s",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/care/skin-care-in-your-20s"
+    },
+    {
+      "id": "healthy-habits",
+      "title": "Everyday habits for healthier skin",
+      "text": "Dermatologists' own habits: apply sunscreen every day before going outdoors, do skin self-exams to find skin cancer early, use products that match your skin type and conditions, cleanse gently with warm water and a mild cleanser, don't smoke (smoking speeds skin aging), and manage stress, which can trigger flare-ups of acne, eczema, psoriasis and rosacea. Avoid tanning, including indoor tanning, and be careful with exfoliation trends, since overuse can damage the skin barrier.",
+      "sourceTitle": "AAD: Skin care tips dermatologists use",
+      "url": "https://www.aad.org/public/everyday-care/skin-care-basics/care/skin-care-tips-dermatologists-use"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import type { SkinProfile } from '../../shared/profile'
 import type { Language } from '../../shared/settings'
 
-const LANGUAGE_NAMES: Record<Language, string> = {
+export const LANGUAGE_NAMES: Record<Language, string> = {
   uz: 'Uzbek (Latin script)',
   ko: 'Korean',
   en: 'English'

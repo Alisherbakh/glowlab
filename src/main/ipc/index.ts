@@ -1,5 +1,7 @@
 import { registerAiIpc } from './ai.ipc'
 import { registerAppIpc } from './app.ipc'
+import { registerAskIpc } from './ask.ipc'
+import { registerDiaryIpc } from './diary.ipc'
 import { registerFaceIpc } from './face.ipc'
 import { registerProductsIpc } from './products.ipc'
 import { registerProfileIpc } from './profile.ipc'
@@ -15,4 +17,6 @@ export function registerIpcHandlers(): void {
   registerAiIpc() // ai:* kanallari
   registerRoutinesIpc() // routines:* kanallari
   registerFaceIpc() // face:* kanallari
+  registerDiaryIpc() // diary:* kanallari
+  registerAskIpc() // ask:* kanallari
 }

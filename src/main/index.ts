@@ -1,12 +1,27 @@
 import { app, shell, BrowserWindow, session } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { getLoadablePath } from 'sqlite-vec'
 import icon from '../../resources/icon.png?asset'
 import { registerIpcHandlers } from './ipc'
 import { initDatabase, closeDatabase } from './db/connection'
 import { getDataPaths } from './db/paths'
 import { startExpiryReminders, stopExpiryReminders } from './jobs/expiryReminder'
 import { stopFaceWorker } from './ai/faceAnalyzer'
+import { getKbDir } from './ai/modelDir'
+import { unpackedPath } from './ai/vectorStore'
+import { initKb } from './services/kb.service'
+
+// sqlite-vec kengaytmasi yo'li (build'da asar'dan chiqarilgan nusxa). Topilmasa → null (oflayn FTS5 ishlaydi)
+function vecExtensionPath(): string | null {
+  try {
+    const path = getLoadablePath()
+    return app.isPackaged ? unpackedPath(path) : path
+  } catch (err) {
+    console.warn('[kb] sqlite-vec topilmadi:', err instanceof Error ? err.message : err)
+    return null
+  }
+}
 
 // So'rov ilovaning o'z sahifasidanmi (dev: Vite server, build: file://)
 function isAppUrl(url: string): boolean {
@@ -53,9 +68,9 @@ function createWindow(): void {
     mainWindow.show()
   })
 
-  // Tashqi havolalar ilova ichida emas, brauzerda ochiladi
+  // Tashqi havolalar ilova ichida emas, brauzerda ochiladi (faqat http/https — boshqa protokollar rad etiladi)
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    if (/^https?:\/\//i.test(details.url)) void shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
@@ -86,6 +101,11 @@ app.whenReady().then(() => {
 
   const { dbFile } = getDataPaths() // userData ichidagi glowlab.db manzili
   initDatabase(dbFile) // Bazani ochamiz + migratsiyalar
+  try {
+    initKb({ kbJsonPath: join(getKbDir(), 'kb.json'), vecPath: vecExtensionPath() }) // RAG bilim bazasi
+  } catch (err) {
+    console.error('[kb] bilim bazasi yuklanmadi:', err) // Ilova baribir ishlaydi, faqat "So'rang" bo'limi bo'sh
+  }
 
   registerIpcHandlers() // Barcha IPC kanallarni ulaymiz (oyna ochilishidan oldin)
   setupPermissions() // Kamera ruxsati (faqat video, faqat ilova oynasi)

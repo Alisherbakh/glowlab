@@ -28,6 +28,7 @@ export type AnalyzeErrorCode =
   | 'invalid_key' // Kalit noto'g'ri
   | 'rate_limit' // Bepul limit tugagan
   | 'network' // Internet yo'q / vaqt tugadi
+  | 'busy' // Gemini serveri band (503) yoki javob kechikdi (504)
   | 'bad_image' // Rasm formati yoki hajmi noto'g'ri
   | 'invalid_response' // AI javobi sxemaga mos kelmadi
   | 'unknown'

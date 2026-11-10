@@ -12,6 +12,7 @@ files:
 asarUnpack:
   - resources/**
   - node_modules/onnxruntime-node/** # Native .node + .dylib asar ichidan yuklanmaydi
+  - node_modules/sqlite-vec-*/** # sqlite-vec kengaytmasi (.dylib) ham asar ichidan yuklanmaydi
 win:
   executableName: GlowLab
 nsis:

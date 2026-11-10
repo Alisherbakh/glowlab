@@ -17,10 +17,14 @@
 
 - [ ] Stage 11 check: `yarn install` (adds @mediapipe/tasks-vision, @techstark/opencv-js) → `yarn dev` → Face scan: (1) clear selfie in daylight → results + region circles on forehead/cheeks/nose/chin/under-eyes; (2) blurry / dark / turned head / two people → quality message; (3) camera → macOS asks permission once → capture works; (4) Save → appears in History; restart → still there. Send screenshots so thresholds can be calibrated.
 - [ ] Calibrate face metric ranges (`main/ai/faceMetrics.ts` → `scale(...)` limits, `BLUR_MIN`, `SIDE_DIFF_MAX`) on 5–10 real photos in different light.
-- [ ] Small: `formatDate` with `uz-UZ` renders like "2026 M11 10" in Chromium → use a custom Uzbek month format.
+
+- [ ] Stage 12 check: `yarn dev` → Kundalik: with ≥ 2 saved face scans the 6 charts show (hover a dot → tooltip), Jadval toggle; "Yangi yozuv" → feeling + tags + note → Save; edit and delete work; restart → entries kept.
+- [ ] Calibration data: in `yarn dev`, after each face scan copy the `[face] …` line from the terminal (5–6 scans: daylight, evening lamp, after washing, oily midday, camera) and send it.
+
+- [x] Stage 13 check (done 2026-11-10: semantic answer with citations, unrelated question → not found without a Gemini call, offline → FTS5 passages): `yarn install` (adds sqlite-vec) → `yarn dev` → terminal shows `[db] migratsiya qo'llandi: 004_kb_search` and `[kb] bilim bazasi yangilandi: 26 ta bo'lak` (no `[kb] sqlite-vec yuklanmadi`). "GlowLab'dan so'rang": (1) with the key: tick consent → ask the 3 examples in Uzbek → answers with [1]/[2] + sources (click opens the browser); first question is slower (26 chunks embedded once); (2) "Fransiyaning poytaxti qaysi?" → "not found"; (3) Wi-Fi off → offline card with passages; (4) send the `[ask] distances …` lines from the terminal.
 
 ## Next
-✅ After the checks → **Stage 12 — Skin diary + progress chart** (diary_entries linked to face_scans, notes, chart of the 6 metrics over time).
+✅ After the checks → **Stage 14 — Compatibility check + AI Lab** (`ai:checkCompatibility` for products; AI Lab page: model metrics, confusion matrix, Grad-CAM — see frontend.md / backend.md).
 Stage 15 note: in the mac build, exclude non-mac onnxruntime binaries (`bin/napi-v6/{win32,linux}`) to save ~200 MB.
 
 ## Roadmap overview

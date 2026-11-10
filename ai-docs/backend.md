@@ -28,7 +28,7 @@ DB: `userData/glowlab.db` · Photos: `userData/photos/` · `PRAGMA foreign_keys 
 | `routines` | id, slot ('AM'/'PM') |
 | `routine_steps` | id, routine_id, product_id, step_order |
 | `diary_entries` | id, face_scan_id, note, created_at |
-| `kb_chunks` + `vec_kb` | RAG knowledge base text + vectors (sqlite-vec) |
+| `kb_chunks` + `kb_fts` + `vec_kb` + `kb_meta` | RAG knowledge base: text (slug, title, source, url), FTS5 index, vectors (sqlite-vec, created in code), seed hash + embedding model (Stage 13) |
 | `vec_products` | product vectors for semantic search |
 | `reminders_log` | id, product_id, sent_at |
 | `settings` | key (PK), value |
@@ -45,13 +45,12 @@ Status: created in `001_init.sql` (Stage 3): skin_profile, products, ingredients
 | `ai:analyzeLabel` ✅ | Label photo → ingredients + risks (Gemini, zod-validated) |
 | `ai:latestAnalysis` ✅ | Latest saved analysis of a product |
 | `ai:keyStatus` ✅, `ai:setKey` ✅ | API key status / save (safeStorage) — key never returned |
-| `ai:classifyProduct` | Photo → product type (ONNX) |
+| `ai:classifyProduct` ✅ | Photo → product type (ONNX) |
 | `ai:checkCompatibility` | Product compatibility |
 | `face:saveScan`, `face:history` | Face scan results |
 | `routines:get` ✅, `routines:save` ✅ | AM/PM routine (whole slot replaced in one transaction) |
 | `diary:list`, `diary:create` | Diary |
-| `search:semantic` | Semantic search |
-| `chat:ask` | RAG chatbot |
+| `ask:question` ✅, `ask:status` ✅ | RAG chatbot over the knowledge base (semantic search via sqlite-vec, FTS5 fallback) |
 | `settings:get` ✅, `settings:set` ✅ | Settings (zod-validated: language uz/ko/en, theme light/dark/system) |
 | `app:ping` ✅ | IPC test |
 | `app:dbInfo` ✅ | DB version, path, tables |

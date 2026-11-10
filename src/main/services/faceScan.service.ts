@@ -1,3 +1,4 @@
+import { is } from '@electron-toolkit/utils'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { z } from 'zod'
@@ -85,6 +86,11 @@ export async function analyzeFace(input: unknown): Promise<FaceAnalysisResult> {
   if (!profile) return { status: 'no_profile' }
 
   const res = await analyzeFacePixelsInWorker(data)
+  if (is.dev) {
+    // Faqat dev rejimida: chegaralarni haqiqiy rasmlarda sozlash uchun xom o'lchovlar (rasm emas, faqat sonlar)
+    const m = Object.entries(res.measures).map(([k, v]) => `${k}=${Number(v.toFixed(2))}`)
+    console.log(`[face] ${m.join(' ')} issues=${res.issues.join(',') || '-'}`)
+  }
   if (res.issues.length > 0) return { status: 'quality', issues: res.issues } // Sifatsiz → natija ko'rsatilmaydi
   return {
     status: 'ok',

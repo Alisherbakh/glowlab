@@ -19,6 +19,8 @@ import type {
   ScanSource
 } from '../shared/faceScan'
 import type { FaceRegion } from '../shared/faceGeometry'
+import type { DiaryEntry, DiaryEntryInput } from '../shared/diary'
+import type { AskResult, KbStatus } from '../shared/ask'
 
 // Renderer'ga beriladigan API — renderer faqat shu funksiyalar orqali main bilan gaplashadi
 const api = {
@@ -69,10 +71,23 @@ const api = {
     list: (): Promise<SavedFaceScan[]> => ipcRenderer.invoke('face:list'),
     remove: (id: number): Promise<void> => ipcRenderer.invoke('face:delete', id)
   },
+  diary: {
+    list: (): Promise<DiaryEntry[]> => ipcRenderer.invoke('diary:list'),
+    create: (input: DiaryEntryInput): Promise<DiaryEntry> =>
+      ipcRenderer.invoke('diary:create', input),
+    update: (id: number, input: DiaryEntryInput): Promise<DiaryEntry> =>
+      ipcRenderer.invoke('diary:update', id, input),
+    remove: (id: number): Promise<void> => ipcRenderer.invoke('diary:delete', id)
+  },
   routines: {
     get: (): Promise<Routines> => ipcRenderer.invoke('routines:get'),
     save: (slot: RoutineSlot, productIds: number[]): Promise<Routines> =>
       ipcRenderer.invoke('routines:save', slot, productIds) // Butun tartib birdaniga saqlanadi
+  },
+  ask: {
+    question: (question: string): Promise<AskResult> =>
+      ipcRenderer.invoke('ask:question', question), // Faqat savol matni yuboriladi
+    status: (): Promise<KbStatus> => ipcRenderer.invoke('ask:status')
   }
 }
 
