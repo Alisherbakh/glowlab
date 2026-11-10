@@ -135,8 +135,11 @@ test("AI Lab: haqiqiy model ko'rsatkichlari", async () => {
 })
 
 test("skrinshotlar (yorug' va qorong'i mavzu)", async () => {
-  const shot = (name: string): Promise<Buffer> =>
-    page.screenshot({ path: `e2e-results/screens/${name}.png`, fullPage: true })
+  const shot = async (name: string): Promise<Buffer> => {
+    await page.mouse.move(0, 0) // Hover holati rasmga tushmasin
+    await page.waitForTimeout(700) // Bosish (ripple) animatsiyasi tugashini kutamiz
+    return page.screenshot({ path: `e2e-results/screens/${name}.png`, fullPage: true })
+  }
   for (const [label, name] of [
     ['Mening javonim', 'shelf'],
     ['Tartib', 'routine'],

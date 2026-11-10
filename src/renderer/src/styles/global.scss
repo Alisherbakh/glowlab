@@ -12,9 +12,9 @@ body {
 
 // Rejimga bog'liq chegara rangi (Layout.module.scss ishlatadi)
 :root[data-mode='light'] {
-  --gl-border: #ede6e3;
+  --gl-border: #d3dacb;
 }
 
 :root[data-mode='dark'] {
-  --gl-border: #33313a;
+  --gl-border: #2d3a31;
 }

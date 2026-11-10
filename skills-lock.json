@@ -13,11 +13,23 @@
       "skillPath": "plugins/differential-review/skills/differential-review/SKILL.md",
       "computedHash": "3c330b7d8e2a7a6bba9ff9c7f9971d3b6c17fef84b9382efdd325abdd481371c"
     },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
     "playwright-testing": {
       "source": "laurigates/claude-plugins",
       "sourceType": "github",
       "skillPath": "testing-plugin/skills/playwright-testing/SKILL.md",
       "computedHash": "50c1491f2dfb4ad0b759af8f5178dba1a0d441f6ee2062811d85ff925dcddea1"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "411316b5893571bda59f1517b1fd639682cbbc26f8c804c08a071f2b7b864992"
     },
     "verification-before-completion": {
       "source": "obra/superpowers",

@@ -203,7 +203,8 @@ function Stat({ label, value }: { label: string; value: string }): React.JSX.Ele
       <Typography variant="caption" color="text.secondary">
         {label}
       </Typography>
-      <Typography variant="h5" sx={{ fontWeight: 600 }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, fontFamily: 'inherit' }}>
+        {/* Raqamlar matn shriftida (serif emas) — o'lchov asbobidek aniq */}
         {value}
       </Typography>
     </Box>

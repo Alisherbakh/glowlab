@@ -10,7 +10,7 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   # Dasturchi fayllari ilovaga kirmaydi (testlar, ML notebooklar, hujjatlar, agent sozlamalari)
-  - '!{e2e,e2e-results,ml,ai-docs,scripts,docs,_to_delete,.claude,.agents}/**'
+  - '!{e2e,e2e-results,ml,ai-docs,scripts,docs,skills,_to_delete,.claude,.agents}/**'
   - '!{vitest.config.mts,playwright.config.ts,CLAUDE.md,skills-lock.json}'
 asarUnpack:
   - resources/**

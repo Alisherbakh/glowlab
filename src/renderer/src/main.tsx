@@ -1,4 +1,5 @@
-import '@fontsource-variable/inter' // Inter shrifti (lokal, internet kerak emas)
+import '@fontsource-variable/figtree' // Matn shrifti (lokal, internet kerak emas)
+import '@fontsource-variable/newsreader' // Sarlavha shrifti (serif)
 import './styles/global.scss'
 
 import { StrictMode } from 'react'
