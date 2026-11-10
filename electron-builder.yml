@@ -11,7 +11,11 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   # Dasturchi fayllari ilovaga kirmaydi (testlar, ML notebooklar, hujjatlar, agent sozlamalari)
   - '!{e2e,e2e-results,ml,ai-docs,scripts,docs,skills,_to_delete,.claude,.agents}/**'
-  - '!{vitest.config.mts,playwright.config.ts,CLAUDE.md,skills-lock.json}'
+  - '!{vitest.config.mts,playwright.config.ts,CLAUDE.md,skills-lock.json,*.tsbuildinfo,.nvmrc}'
+  - '!{playwright-report,test-results}/**'
+  # onnxruntime-node hamma platformalar binarini olib keladi (~295 MB) → faqat build qilinayotgan platformaniki qoladi.
+  # Diqqat: platforma bo'limida (mac:) `files` yozilmaydi — u bu umumiy ro'yxatni to'liq ALMASHTIRADI
+  - '!node_modules/onnxruntime-node/bin/napi-v6/!(${platform})/**'
 asarUnpack:
   - resources/**
   - node_modules/onnxruntime-node/** # Native .node + .dylib asar ichidan yuklanmaydi
@@ -25,9 +29,6 @@ nsis:
   createDesktopShortcut: always
 mac:
   entitlementsInherit: build/entitlements.mac.plist
-  files:
-    # onnxruntime-node barcha platformalar uchun ~295 MB binar olib keladi → Mac build'da faqat darwin qoladi
-    - '!node_modules/onnxruntime-node/bin/napi-v6/{linux,win32}/**'
   extendInfo:
     - NSCameraUsageDescription: GlowLab uses the camera only for local skin analysis. Photos never leave your computer.
   notarize: false
