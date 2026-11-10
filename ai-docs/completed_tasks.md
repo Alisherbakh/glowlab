@@ -1,0 +1,77 @@
+# Completed Tasks
+
+Format: `YYYY-MM-DD — Part/Stage — what was done`
+
+## 2026-11-09
+- Planning — Project idea chosen: GlowLab (standalone cosmetics desktop app, separate from yasmin/autore).
+- Planning — Full feature list, tech stack, SQLite schema, IPC channels, screens, folder structure, 15-stage roadmap agreed.
+- Planning — Decided: SQLite (not MongoDB), one Electron project (main + renderer, not split repos), OpenCV face analysis with questionnaire + Quality Gate + AI disclaimer.
+- Part A — Environment checked on Mac: Node v20.20.0, Yarn 1.22.22, Git 2.53.0, Xcode CLT installed, Python 3.14.9. Git init postponed to end of project (Alisher's choice).
+- Part B / B1 — `CLAUDE.md` created.
+- Part B / B2 — `ai-docs/` created (completed_tasks, next_steps, prompts, frontend, backend).
+- Part B / B3 — 7 project skills created in `.claude/skills/` (phase-runner, sqlite-feature, ui-ux, responsible-ai-check, opencv-feature, ml-pipeline, release-check).
+- Part B / B4 — `Desktop/glowlab-career/decisions.md` (D1–D10, with Korean interview answers) and `interview-explainer` skill created outside the project. Part B complete.
+- Stage 2 — electron-vite React+TS project scaffolded (`@quick-start/electron`, react-ts template) and merged into `glowlab/`.
+  - package.json: name `glowlab`, productName `GlowLab`, scripts use yarn; electron-builder: appId `com.alisher.glowlab`, camera usage text, unused mic/docs/downloads permissions and example publish URL removed.
+  - Security: `contextIsolation: true`, `nodeIntegration: false` (sandbox kept false as template default).
+  - IPC: `app:ping` (main/ipc/app.ipc.ts) → `window.api.app.ping()` (typed in preload), start screen shows "pong".
+  - Folders created (main: db/migrations, models, services, ipc, ai, jobs; renderer: pages, components, hooks, cv, i18n, styles; src/shared; ml; resources/models). Template demo files removed. Simple GlowLab icon added.
+  - `.gitignore`: `.env*`, `*.db*` added.
+  - Verified in a Linux sandbox: `yarn typecheck` ✅, `electron-vite build` ✅, eslint ✅, prettier ✅. Mac run ✅ (needed Node 22: `.nvmrc` = 22, `engines.node >= 22.12.0`, because Electron 44 requires Node ≥ 22.12).
+- Stage 3 — SQLite ✅ (Mac check passed: version 1, 13 tables, DB at ~/Library/Application Support/GlowLab/glowlab.db)
+  - Packages: `better-sqlite3` ^13.0.3, `zod` ^4.6.7, `@types/better-sqlite3` ^9.6.0. Native rebuild for Electron is done by the template's postinstall (`electron-builder install-app-deps`).
+  - `db/connection.ts` (WAL, foreign_keys ON, singleton), `db/migrate.ts` (PRAGMA user_version, one transaction per migration), `db/paths.ts` (userData/glowlab.db, userData/photos/), `db/migrations/001_init.sql` (13 tables, AM/PM routines seeded), migrations imported with Vite `?raw`.
+  - IPC `app:dbInfo` → start screen shows version, DB path and table list. DB closed on `will-quit`.
+  - Verified in Linux sandbox: typecheck ✅, build ✅ (better-sqlite3 stays external), lint ✅; migration test with real SQLite: 13 tables, re-run is a no-op, ON DELETE CASCADE ✅, CHECK ✅, UNIQUE NOCASE ✅.
+- Stage 4 — UI base ✅ (Mac check passed: sidebar, pages, Uzbek UI, dark mode)
+  - Palette approved by Alisher (rose #C8798A, sage #7FA38E, OK/Soon/Danger). Tokens: `renderer/src/theme/tokens.ts`; MUI theme light/dark: `theme/theme.ts`.
+  - Packages: @mui/material ^9.5.0, @mui/icons-material ^9.5.0, @emotion/react, @emotion/styled, @fontsource-variable/inter, sass (dev).
+  - Layout: `layout/Sidebar.tsx`, `layout/TopBar.tsx`, `layout/Layout.module.scss`; navigation via state (`navigation.ts`, `pages/index.ts`) — no router needed in a desktop app.
+  - 8 pages (Dashboard, Shelf, Face scan, Routine, Diary, Ask, AI Lab, Settings); unbuilt ones show `ComingSoon` with their stage number.
+  - i18n: `i18n/en.ts` (keys + types), `uz.ts`, `ko.ts`, `translate()` with `{param}` replacement.
+  - Settings: `models/settings.model.ts` (UPSERT), `services/settings.service.ts` (zod-validated, strict keys), IPC `settings:get` / `settings:set`, `SettingsProvider` + `useSettings()` in renderer. Theme modes: light / dark / system.
+  - Old template `assets/` folder moved to `_to_delete/` (deleting is off; Alisher can delete it).
+  - Verified in Linux sandbox: typecheck ✅, build ✅, eslint ✅, zod + UPSERT logic tested.
+  - Note: MUI v9 removed system props on Typography (`fontWeight={600}`) → use `sx={{ fontWeight: 600 }}`.
+- Stage 5 — Onboarding questionnaire ✅ (Mac check passed)
+  - `shared/profile.ts` (AGE_RANGES, SKIN_TYPES, CONCERNS, SkinProfile types).
+  - Main: `models/profile.model.ts` (single row id=1, UPSERT), `services/profile.service.ts` (strict zod, de-duplicated concerns, safe JSON parse), IPC `profile:get` / `profile:save`.
+  - Renderer: `ProfileProvider` + `useProfile()`; `onboarding/OnboardingFlow.tsx` (3 steps: age range → skin type → concerns; first-launch and edit modes), `onboarding/SkinTypeQuiz.tsx` + `quiz.ts` (4 questions, "sensitive" wins when reactions are frequent; note "guide, not a diagnosis").
+  - Settings page: Skin profile card with "Edit profile". Privacy line "answers stay on this computer". 60 new i18n keys in uz/ko/en.
+  - Verified in sandbox: typecheck ✅, build ✅, eslint ✅; quiz scoring tested (dry, combination, sensitive, oily); profile UPSERT tested.
+- Stage 6 — My Shelf ✅ (Mac check passed)
+  - `shared/products.ts`: categories, PAO options, `computeExpiresAt` (month-end safe: Jan 31 + 1M → Feb 28/29), `getExpiryStatus` (expired / soon ≤ 30 days / ok / unknown), `todayLocal`, `isValidDate`.
+  - Main: `models/product.model.ts` (named params, ordering: nearest expiry first, no-date last), `services/product.service.ts` (strict zod: name 1–120, brand ≤ 80, real date, not in the future, PAO 1–60; expires_at computed in main), IPC `products:list/create/update/delete`.
+  - Renderer: `useProducts()`, `ExpiryBadge` (🟢🟡🔴), `ProductDialog` (live expiry preview, validation), `ConfirmDialog`, `ShelfPage` (search, category filter, empty state, card menu edit/delete), `DashboardPage` (3 stat cards + "Needs attention" list), `navContext` (Dashboard → Shelf), `utils/format.ts` (dates in uz/ko/en). 54 new i18n keys.
+  - Verified in sandbox: typecheck ✅, build ✅, eslint ✅; expiry math tested (month ends, leap year, invalid date, 30/31-day boundary); SQL ordering/update/delete tested.
+- Stage 7 — Label scan with Gemini (code done, Mac check pending)
+  - Package: `@google/genai` ^3.0.0. Model `gemini-3.8-flash` (from the official structured-output docs, 2026-11), overridable with `GEMINI_MODEL`.
+  - API key: dev → `.env` (`GEMINI_API_KEY`, loaded with `process.loadEnvFile` only in dev); users → Settings card, encrypted with Electron `safeStorage` (macOS Keychain). The key never goes to the renderer. `.env.example` added.
+  - Main: `ai/gemini.ts` (inline image + `responseMimeType: application/json` + `responseJsonSchema`, temperature 0.2, 60 s timeout, error mapping: no_key / invalid_key / rate_limit / network / invalid_response), `ai/labelPrompt.ts` (no invented ingredients, `readable=false` for bad photos, profile-aware warnings, output in the user's language), `services/analysis.service.ts` (zod on input ≤ 8 MB and on every AI response, dedupe, save to `label_analyses` + `ingredients` + `product_ingredients` in a transaction), IPC `ai:analyzeLabel`, `ai:latestAnalysis`, `ai:keyStatus`, `ai:setKey`.
+  - Renderer: `utils/imageQuality.ts` (Quality Gate: min side 500 px, Laplacian blur, too dark / too bright; re-encodes to ≤ 1600 px JPEG which strips EXIF/GPS), `LabelScanDialog` (pick or drag-drop, quality messages, consent checkbox, results with risk chips + warnings + summary, "Scan again"), `AiDisclaimer`, `AiKeyCard` (Settings), Shelf card menu "Scan ingredient label". 43 new i18n keys.
+  - Verified in sandbox: typecheck ✅, build ✅, eslint ✅; zod response handling, ingredient upsert/link SQL, and quality math tested. Live Gemini call NOT tested in sandbox (network blocked) → first real test on Mac.
+- Skill — `testing` skill added in `.claude/skills/testing/` (Vitest patterns, better-sqlite3/Electron ABI rule, Gemini mocking). Listed in CLAUDE.md.
+- Stage 8 — Routine + reminders (code done, Mac check pending)
+  - `shared/routine.ts` (AM/PM, max 15 steps); settings gained `reminders: 'on' | 'off'` (default on).
+  - Main: `models/routine.model.ts` (replace steps in one transaction, IN (?, ?) with parameters), `services/routine.service.ts` (zod: unique ids, products must exist), IPC `routines:get` / `routines:save`.
+  - Reminders: `models/reminder.model.ts` + `jobs/expiryReminder.ts` (first check 5 s after start, then every 6 h; max 3 notifications per check; one "soon" and one "expired" notification per product via `reminders_log`; click → focuses the window), `jobs/reminderText.ts` (uz/ko/en). Editing a product clears its reminder log so a changed date notifies again. No node-cron needed (setInterval).
+  - Renderer: `RoutinePage` (two cards Morning/Evening, numbered steps, up/down/remove, add from shelf, expired product → red border + warning, saves immediately), Settings switch "Expiry reminders". 14 new i18n keys (added on device by script; content verified identical to sandbox by hash).
+  - Verified in sandbox: typecheck ✅, build ✅, eslint ✅; routine replace/order, IN-list count, cascade on product delete, reminder de-duplication tested.
+- Stage 9 — ML notebooks (code done, training in Colab pending)
+  - `ml/01_dataset.ipynb` (Bing download with safe search, 3 queries × 6 classes, clean: broken / < 150 px / duplicate by hash, convert to RGB JPEG, manual review grid, 70/15/15 split with seed 42, all in Google Drive `MyDrive/glowlab_ml/`).
+  - `ml/02_train.ipynb` (MobileNetV2 ImageNet weights, frozen backbone → new `Linear(1280, 6)`, 8 epochs lr 1e-3; then unfreeze last 4 blocks, 6 epochs lr 1e-4; train-only augmentation; best val `state_dict` + `classes.json`).
+  - `ml/03_evaluate.ipynb` (test accuracy + per class, confusion matrix PNG, threshold chosen on **val** for ≥ 90 % accuracy on answered cases, Grad-CAM with tensor hooks on `features[-1]`, `metrics.json`).
+  - `ml/04_export.ipynb` (`torch.onnx.export` opset 17, dynamic batch, `dynamo=False`; `preprocess.json` with size/mean/std/threshold; PyTorch vs ONNX Runtime check on 30 test images).
+  - Classes: cleanser, toner, serum, moisturizer, sunscreen, lip (others → "Not sure").
+  - `ml/README.md` with Colab steps. `.gitignore`: `ml/data/`, `ml/raw/`, `*.pt`.
+  - Verified in sandbox: all code cells compile (Python syntax), notebooks are valid JSON. Not run (no torch/GPU in sandbox) → first real run in Colab.
+  - Update (dataset v2): `01_dataset.ipynb` rewritten to merge ready datasets instead of Bing-only. Sources (CC BY 4.0, Roboflow, COCO export, uploaded by Alisher to `MyDrive/glowlab_ml/sources/`): `skincare-dataset` (cleanser, toners, sunscreen/sunblock) + `makeup-products-detection` (serum, lotion→moisturizer, sun block, lip stick/gloss/balm→lip). Only mapped classes kept (`CLASS_MAP`), bounding boxes cropped (10 % padding, min 64 px), Roboflow augmented copies (`.rf.`) skipped, hash dedupe, Bing optional top-up (`USE_BING`), numbered review + delete-by-index, group-aware 70/15/15 split (crops from one source image stay in one split). `02_train` gained class weights. Logic tested in sandbox on fake COCO data (mapping, crop, augment-skip, idempotent re-run, no group leakage).
+  - ✅ Trained in Colab (2026-11-10). Files in `resources/models/`: `product_classifier.onnx` (8.9 MB, input `input` [batch,3,224,224], output `logits` [batch,6], checked with onnxruntime on Mac), `classes.json`, `preprocess.json` (224, ImageNet mean/std, threshold 0.30), `metrics.json`, `confusion_matrix.png`.
+  - Test accuracy 97.8 % (319 test images). Weak spot: 5 lip → moisturizer; moisturizer precision 9/15 (only 46 moisturizer images). Data comes from 2 Roboflow sets with similar backgrounds → real-world photos will likely score lower.
+- Stage 10 — Product classifier in app (code done, Mac check pending)
+  - Package: `onnxruntime-node` ^1.31.1 (published 2026-10-26; macOS arm64 binaries are bundled, no download at install). `electron-builder.yml`: `asarUnpack` + `node_modules/onnxruntime-node/**`.
+  - Shared: `shared/classifier.ts` (input 224x224 RGB, `MIN_CONFIDENCE = 0.6`, supported categories, `ClassifyResult` = ok / unsure / unavailable).
+  - Main: `ai/classifierMath.ts` (pure: RGB→NCHW normalize, softmax, topK), `ai/classifier.ts` (lazy single load, zod on `preprocess.json` + `classes.json`, threshold = max(model 0.30, 0.60), missing/broken model → `unavailable`, app keeps working), `services/classifier.service.ts` (zod: exactly 150 528 bytes), IPC `ai:classifyProduct`, preload `api.ai.classifyProduct`.
+  - Renderer: `utils/classifierInput.ts` (createImageBitmap honors EXIF, step-wise downscale to 224x224 like PIL antialias, white background for PNG, quality gate with 300 px min side — label scan keeps 500 px), `components/PhotoSuggest.tsx` (inside ProductDialog under Category: pick photo → thumbnail → "Looks like: Serum (87% sure)" + "Use this"; unsure/unavailable/quality/error states; AiDisclaimer on every result; category changes only when the user clicks). `imageQuality.findIssues` gained optional `minSide`. 10 new i18n keys × 3.
+  - Verified in sandbox: typecheck ✅, eslint ✅, prettier ✅, build ✅ (`onnxruntime-node` stays an external require). Node normalization vs Python on the real model: max logit diff 1.4e-6. Chromium canvas vs PIL resize on 15 real product crops: top-1 agrees 15/15, mean pixel diff < 1.5/255. Random-noise input → "lip" 36–45 % → correctly "unsure" with 0.60 (would have passed 0.30).
+  - Test crops are in `_to_delete/clf_test/` (gitignored) — safe to delete.

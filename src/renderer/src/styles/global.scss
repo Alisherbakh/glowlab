@@ -1,0 +1,20 @@
+// Global uslublar (MUI CssBaseline'dan keyin)
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+// Rejimga bog'liq chegara rangi (Layout.module.scss ishlatadi)
+:root[data-mode='light'] {
+  --gl-border: #ede6e3;
+}
+
+:root[data-mode='dark'] {
+  --gl-border: #33313a;
+}
