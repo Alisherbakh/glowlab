@@ -27,7 +27,7 @@ Mac terminal:
 yarn add -D vitest
 ```
 
-`vitest.config.ts` (project root):
+`vitest.config.mts` (project root; `.mts` avoids Vite's CJS-config warning). Actual config uses two projects — `unit` (`src/**/*.test.ts`) and `db` (`src/**/*.db.test.ts`):
 ```ts
 import { defineConfig } from 'vitest/config'
 
@@ -58,7 +58,8 @@ Rule:
 - Pure logic tests → `yarn test` (plain Node, no SQLite import).
 - Tests that touch SQLite → `yarn test:db` (runs Vitest inside Electron's own Node, same ABI).
 - Never "fix" this by rebuilding better-sqlite3 for Node — the app would then break in `yarn dev`.
-- Not yet verified on this project: run `yarn test:db` once when tests are first added and record the result here.
+- Verified 2026-11-10 (sandbox, Electron 44): better-sqlite3 13 ships N-API prebuilds, so the same binary loads in Node and in Electron; `yarn test:db` (Electron's Node) passed 35/35. Keep `test:db` anyway so DB tests always run on the app's exact runtime.
+- E2E: `yarn test:e2e` (Playwright `_electron`, see `e2e/app.spec.ts`). The app uses a temp profile via `GLOWLAB_E2E_USER_DATA` (ignored in packaged builds) and drops `GEMINI_API_KEY`.
 
 ## 4. Patterns
 

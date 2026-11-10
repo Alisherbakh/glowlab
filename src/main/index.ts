@@ -82,8 +82,16 @@ function createWindow(): void {
   }
 }
 
+// E2E testlar (yarn test:e2e): vaqtinchalik alohida papka va haqiqiy kalitsiz ishlaydi.
+// Faqat build qilinmagan ilovada — o'rnatilgan .app bu o'zgaruvchiga e'tibor bermaydi
+const e2eUserData = app.isPackaged ? undefined : process.env['GLOWLAB_E2E_USER_DATA']
+if (e2eUserData) {
+  app.setPath('userData', e2eUserData) // Foydalanuvchining haqiqiy bazasiga tegilmaydi
+  delete process.env['GEMINI_API_KEY'] // Testlar Google'ga hech narsa yubormaydi
+}
+
 // Dev rejimda .env fayldan GEMINI_API_KEY ni o'qiymiz (fayl gitga tushmaydi)
-if (is.dev) {
+if (is.dev && !e2eUserData) {
   try {
     process.loadEnvFile(join(app.getAppPath(), '.env'))
   } catch {

@@ -23,3 +23,8 @@ ml/sources/
 ml/raw/
 *.pt
 *.pth
+
+# Test natijalari (Playwright)
+e2e-results/
+playwright-report/
+test-results/
