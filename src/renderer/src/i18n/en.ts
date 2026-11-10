@@ -215,7 +215,85 @@ export const en = {
     "I'm not sure what type of product this is. Please choose the category yourself, or try a clearer photo of the whole product.",
   'suggest.unavailable':
     "Photo suggestions aren't available right now. Please choose the category yourself.",
-  'suggest.previewAlt': 'Selected product photo'
+  'suggest.previewAlt': 'Selected product photo',
+  'face.intro':
+    'Check what your skin looks like in a photo. Everything is analyzed on this computer — the photo is never uploaded or saved.',
+  'face.profileNote': 'Results are interpreted for your profile: {age}, {skin} skin.',
+  'face.tipsTitle': 'For an accurate result:',
+  'face.tip1': 'Face a window or soft light; avoid flash and strong shadows.',
+  'face.tip2': 'No makeup and no beauty filters.',
+  'face.tip3': 'Keep hair off your forehead and take off glasses.',
+  'face.tip4': 'Look straight at the camera with a relaxed face.',
+  'face.tip5': 'Hold the camera at eye level so your face fills most of the frame.',
+  'face.upload': 'Upload a photo',
+  'face.camera': 'Use camera',
+  'face.working': 'Analyzing on this computer…',
+  'face.unavailable':
+    'The face analysis model is missing. Put face_landmarker.task into the resources/models folder and restart the app.',
+  'face.error': "Couldn't analyze this image. Try another photo.",
+  'face.previewAlt': 'Selected photo',
+  'face.qualityTitle':
+    'This photo is not good enough for an accurate result. Please upload a better photo or retake it with the camera:',
+  'face.issue.no_face': 'No face was found.',
+  'face.issue.multiple_faces': 'More than one face is in the photo. Only one person, please.',
+  'face.issue.face_too_small':
+    'The face is too small. Move closer so your face fills most of the frame.',
+  'face.issue.not_frontal': 'Your head is turned or tilted. Look straight at the camera.',
+  'face.issue.blurry': 'The photo is blurry. Hold still and make sure it is in focus.',
+  'face.issue.too_dark': 'The photo is too dark. Face a window or a soft light.',
+  'face.issue.too_bright':
+    'The photo is too bright or has strong glare. Avoid direct light and flash.',
+  'face.issue.uneven_light': 'One side of your face is much darker. Face the light evenly.',
+  'face.tryPhoto': 'Upload a better photo',
+  'face.tryCamera': 'Retake with camera',
+  'face.resultTitle': 'What the photo shows',
+  'face.regionsCaption': 'Analyzed areas',
+  'face.metric.oiliness': 'Shine (oiliness)',
+  'face.metric.redness': 'Redness',
+  'face.metric.texture': 'Texture',
+  'face.metric.spots': 'Dark spots',
+  'face.metric.darkCircles': 'Under-eye darkness',
+  'face.metric.evenness': 'Uneven tone',
+  'face.level.low': 'Low',
+  'face.level.moderate': 'Moderate',
+  'face.level.high': 'High',
+  'face.desc.oiliness': 'Shiny spots on the forehead and nose.',
+  'face.desc.redness': 'Red tone on the cheeks, nose and chin.',
+  'face.desc.texture': 'Fine unevenness of the skin surface.',
+  'face.desc.spots': 'Small spots darker than the skin around them.',
+  'face.desc.darkCircles': 'How much darker the under-eye area is than the cheeks.',
+  'face.desc.evenness': 'Patchy lighter and darker areas.',
+  'face.advice.oiliness':
+    'A gentle cleanser and a light, non-comedogenic moisturizer may help; blotting papers work during the day.',
+  'face.advice.redness':
+    'Choose gentle, fragrance-free products and patch-test new ones. If redness is persistent, itchy or painful, see a dermatologist.',
+  'face.advice.texture':
+    'Regular moisturizing and daily sunscreen help; introduce exfoliating products slowly.',
+  'face.advice.spots':
+    'Daily SPF 30+ helps keep spots from getting darker. Ask a dermatologist about any spot that changes.',
+  'face.advice.darkCircles':
+    'Sleep and a gentle eye cream may help; genetics and lighting also play a big role.',
+  'face.advice.evenness':
+    'Daily sunscreen and gentle, consistent care help even out tone over time.',
+  'face.notDiagnosis':
+    'This is not a diagnosis. Lighting, camera and makeup change the result — compare scans taken in the same conditions.',
+  'face.save': 'Save to history',
+  'face.saved': 'Saved ✓',
+  'face.again': 'New scan',
+  'face.historyTitle': 'History',
+  'face.historyEmpty': 'No saved scans yet. Only the numbers are saved, never the photo.',
+  'face.source.photo': 'Photo',
+  'face.source.camera': 'Camera',
+  'face.delete': 'Delete scan',
+  'face.deleteConfirm': 'Delete this scan from history?',
+  'camera.title': 'Take a photo',
+  'camera.hint': 'Center your face in the frame and look straight ahead.',
+  'camera.capture': 'Capture',
+  'camera.cancel': 'Cancel',
+  'camera.denied':
+    'Camera access is blocked. Allow it in System Settings → Privacy & Security → Camera, then try again.',
+  'camera.notFound': 'No camera was found.',
+  'camera.error': "Couldn't start the camera. Try uploading a photo instead."
 } as const
 
 export type TranslationKey = keyof typeof en

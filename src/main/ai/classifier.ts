@@ -1,6 +1,5 @@
 // Mahsulot turini rasmdan aniqlovchi oflayn model (MobileNetV2 → ONNX, onnxruntime-node)
 // Model fayllari: resources/models/ (Colab'dagi ml/04_export.ipynb natijasi)
-import { app } from 'electron'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import * as ort from 'onnxruntime-node'
@@ -8,6 +7,7 @@ import { z } from 'zod'
 import { CLASSIFIER_INPUT_SIZE, MIN_CONFIDENCE, type ClassifyResult } from '../../shared/classifier'
 import { PRODUCT_CATEGORIES, type ProductCategory } from '../../shared/products'
 import { rgbToNchw, softmax, topK } from './classifierMath'
+import { getModelDir } from './modelDir'
 
 // preprocess.json — Python'dagi preprocessing bilan bir xil bo'lishi shart
 const preprocessSchema = z.object({
@@ -30,12 +30,6 @@ type LoadedModel = {
 }
 
 let loading: Promise<LoadedModel | null> | null = null // Model faqat bir marta yuklanadi
-
-// Dev: loyiha papkasi; build: asar ichidan chiqarilgan (asarUnpack) papka
-function getModelDir(): string {
-  const dir = join(app.getAppPath(), 'resources', 'models')
-  return app.isPackaged ? dir.replace('app.asar', 'app.asar.unpacked') : dir
-}
 
 async function loadModel(): Promise<LoadedModel | null> {
   try {

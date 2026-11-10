@@ -216,5 +216,81 @@ export const ko: Record<TranslationKey, string> = {
   'suggest.unsure':
     '어떤 종류의 제품인지 확실하지 않아요. 종류를 직접 선택하거나, 제품 전체가 보이는 더 선명한 사진을 올려 주세요.',
   'suggest.unavailable': '지금은 사진 추천을 사용할 수 없어요. 종류를 직접 선택해 주세요.',
-  'suggest.previewAlt': '선택한 제품 사진'
+  'suggest.previewAlt': '선택한 제품 사진',
+  'face.intro':
+    '사진 속 피부 상태를 확인해 보세요. 모든 분석은 이 컴퓨터에서 이루어지며, 사진은 업로드되거나 저장되지 않습니다.',
+  'face.profileNote': '결과는 내 프로필 기준으로 해석됩니다: {age}, {skin} 피부.',
+  'face.tipsTitle': '정확한 결과를 위해:',
+  'face.tip1': '창문이나 부드러운 조명을 향해 서고, 플래시와 강한 그림자는 피하세요.',
+  'face.tip2': '메이크업과 뷰티 필터 없이 촬영하세요.',
+  'face.tip3': '앞머리를 넘기고 안경을 벗어 주세요.',
+  'face.tip4': '편안한 표정으로 카메라를 정면으로 바라보세요.',
+  'face.tip5': '카메라를 눈높이에 두고 얼굴이 화면의 대부분을 채우게 하세요.',
+  'face.upload': '사진 업로드',
+  'face.camera': '카메라 사용',
+  'face.working': '이 컴퓨터에서 분석하는 중…',
+  'face.unavailable':
+    '얼굴 분석 모델이 없습니다. face_landmarker.task 파일을 resources/models 폴더에 넣고 앱을 다시 시작하세요.',
+  'face.error': '이 이미지를 분석할 수 없습니다. 다른 사진을 선택해 주세요.',
+  'face.previewAlt': '선택한 사진',
+  'face.qualityTitle':
+    '이 사진으로는 정확한 결과를 얻기 어렵습니다. 더 좋은 사진을 올리거나 카메라로 다시 촬영해 주세요:',
+  'face.issue.no_face': '얼굴을 찾지 못했습니다.',
+  'face.issue.multiple_faces': '사진에 얼굴이 여러 개 있습니다. 한 사람만 나오게 해 주세요.',
+  'face.issue.face_too_small': '얼굴이 너무 작습니다. 얼굴이 화면을 채우도록 가까이 와 주세요.',
+  'face.issue.not_frontal': '고개가 돌아가거나 기울어졌습니다. 카메라를 정면으로 바라보세요.',
+  'face.issue.blurry': '사진이 흐립니다. 움직이지 말고 초점이 맞았는지 확인하세요.',
+  'face.issue.too_dark': '사진이 너무 어둡습니다. 창문이나 부드러운 조명을 향해 주세요.',
+  'face.issue.too_bright': '사진이 너무 밝거나 반사가 강합니다. 직사광선과 플래시를 피하세요.',
+  'face.issue.uneven_light': '얼굴 한쪽이 훨씬 어둡습니다. 빛을 정면으로 고르게 받아 주세요.',
+  'face.tryPhoto': '더 좋은 사진 업로드',
+  'face.tryCamera': '카메라로 다시 촬영',
+  'face.resultTitle': '사진에서 보이는 것',
+  'face.regionsCaption': '분석한 부위',
+  'face.metric.oiliness': '번들거림(유분)',
+  'face.metric.redness': '붉은기',
+  'face.metric.texture': '피부결',
+  'face.metric.spots': '잡티',
+  'face.metric.darkCircles': '눈밑 어두움',
+  'face.metric.evenness': '톤 불균일',
+  'face.level.low': '낮음',
+  'face.level.moderate': '보통',
+  'face.level.high': '높음',
+  'face.desc.oiliness': '이마와 코의 번들거리는 부분.',
+  'face.desc.redness': '볼, 코, 턱의 붉은 톤.',
+  'face.desc.texture': '피부 표면의 미세한 울퉁불퉁함.',
+  'face.desc.spots': '주변 피부보다 어두운 작은 점.',
+  'face.desc.darkCircles': '눈밑이 볼보다 얼마나 어두운지.',
+  'face.desc.evenness': '밝고 어두운 부분이 얼룩덜룩한 정도.',
+  'face.advice.oiliness':
+    '순한 클렌저와 가벼운 논코메도제닉 보습제가 도움이 될 수 있어요. 낮에는 기름종이를 사용해 보세요.',
+  'face.advice.redness':
+    '순하고 무향인 제품을 고르고, 새 제품은 패치 테스트를 해 보세요. 붉은기가 오래가거나 가렵거나 아프면 피부과 전문의와 상담하세요.',
+  'face.advice.texture':
+    '꾸준한 보습과 매일 자외선 차단제가 도움이 됩니다. 각질 제거 제품은 천천히 시작하세요.',
+  'face.advice.spots':
+    '매일 SPF 30+ 자외선 차단제는 잡티가 진해지는 것을 막는 데 도움이 됩니다. 모양이 변하는 점은 피부과 전문의에게 확인받으세요.',
+  'face.advice.darkCircles':
+    '충분한 수면과 순한 아이크림이 도움이 될 수 있어요. 유전과 조명의 영향도 큽니다.',
+  'face.advice.evenness':
+    '매일 자외선 차단과 꾸준하고 순한 관리가 시간이 지나며 톤을 고르게 하는 데 도움이 됩니다.',
+  'face.notDiagnosis':
+    '이 결과는 진단이 아닙니다. 조명, 카메라, 메이크업에 따라 결과가 달라지니 같은 조건에서 찍은 결과끼리 비교하세요.',
+  'face.save': '기록에 저장',
+  'face.saved': '저장됨 ✓',
+  'face.again': '새로 분석',
+  'face.historyTitle': '기록',
+  'face.historyEmpty': '저장된 기록이 아직 없습니다. 사진은 저장되지 않고 숫자만 저장됩니다.',
+  'face.source.photo': '사진',
+  'face.source.camera': '카메라',
+  'face.delete': '기록 삭제',
+  'face.deleteConfirm': '이 기록을 삭제할까요?',
+  'camera.title': '사진 촬영',
+  'camera.hint': '얼굴을 화면 가운데에 맞추고 정면을 바라보세요.',
+  'camera.capture': '촬영',
+  'camera.cancel': '취소',
+  'camera.denied':
+    '카메라 접근이 차단되어 있습니다. 시스템 설정 → 개인정보 보호 및 보안 → 카메라에서 허용한 뒤 다시 시도하세요.',
+  'camera.notFound': '카메라를 찾을 수 없습니다.',
+  'camera.error': '카메라를 시작할 수 없습니다. 대신 사진을 업로드해 보세요.'
 }

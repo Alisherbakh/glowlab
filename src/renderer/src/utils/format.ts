@@ -10,3 +10,12 @@ export function formatDate(value: string, lang: Language): string {
     date
   )
 }
+
+// SQLite datetime('now') (UTC, "YYYY-MM-DD HH:MM:SS") → mahalliy sana va vaqt
+export function formatDateTime(value: string, lang: Language): string {
+  const date = new Date(value.replace(' ', 'T') + 'Z')
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat(LOCALES[lang], { dateStyle: 'medium', timeStyle: 'short' }).format(
+    date
+  )
+}

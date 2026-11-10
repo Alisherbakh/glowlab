@@ -219,5 +219,85 @@ export const uz: Record<TranslationKey, string> = {
   'suggest.unsure':
     "Bu qaysi turdagi mahsulot ekaniga ishonchim komil emas. Iltimos, turini o'zingiz tanlang yoki mahsulot to'liq ko'ringan aniqroq rasm yuklang.",
   'suggest.unavailable': "Rasmdan aniqlash hozir ishlamayapti. Iltimos, turini o'zingiz tanlang.",
-  'suggest.previewAlt': 'Tanlangan mahsulot rasmi'
+  'suggest.previewAlt': 'Tanlangan mahsulot rasmi',
+  'face.intro':
+    "Teringiz rasmda qanday ko'rinishini tekshiring. Hammasi shu kompyuterda tahlil qilinadi — rasm hech qayerga yuborilmaydi va saqlanmaydi.",
+  'face.profileNote': "Natijalar profilingiz bo'yicha talqin qilinadi: {age}, teri turi — {skin}.",
+  'face.tipsTitle': 'Aniq natija uchun:',
+  'face.tip1':
+    "Derazaga yoki yumshoq yorug'likka qarang; chiroq (flash) va kuchli soyadan saqlaning.",
+  'face.tip2': "Pardoz (makiyaj) va go'zallik filtrlarisiz.",
+  'face.tip3': "Sochni peshonadan oling, ko'zoynakni yeching.",
+  'face.tip4': "Kameraga to'g'ri, yuzingizni bo'shashtirib qarang.",
+  'face.tip5': "Kamerani ko'z darajasida tuting, yuz kadrning katta qismini egallasin.",
+  'face.upload': 'Rasm yuklash',
+  'face.camera': 'Kamera orqali',
+  'face.working': 'Shu kompyuterda tahlil qilinmoqda…',
+  'face.unavailable':
+    "Yuz tahlili modeli topilmadi. face_landmarker.task faylini resources/models papkasiga qo'ying va ilovani qayta ishga tushiring.",
+  'face.error': "Bu rasmni tahlil qilib bo'lmadi. Boshqa rasm tanlang.",
+  'face.previewAlt': 'Tanlangan rasm',
+  'face.qualityTitle':
+    'Bu rasm aniq natija uchun yetarli emas. Iltimos, sifatliroq rasm yuklang yoki kamera bilan qayta oling:',
+  'face.issue.no_face': 'Yuz topilmadi.',
+  'face.issue.multiple_faces': "Rasmda bir nechta yuz bor. Iltimos, faqat bitta odam bo'lsin.",
+  'face.issue.face_too_small':
+    'Yuz juda kichik. Yaqinroq keling, yuz kadrning katta qismini egallasin.',
+  'face.issue.not_frontal': "Boshingiz burilgan yoki egilgan. Kameraga to'g'ri qarang.",
+  'face.issue.blurry': "Rasm xira. Qimirlamang va fokus to'g'ri ekaniga ishonch hosil qiling.",
+  'face.issue.too_dark': "Rasm juda qorong'i. Derazaga yoki yumshoq yorug'likka qarang.",
+  'face.issue.too_bright':
+    "Rasm juda yorug' yoki kuchli yaltirash bor. To'g'ridan-to'g'ri yorug'lik va chiroqdan saqlaning.",
+  'face.issue.uneven_light': "Yuzning bir tomoni ancha qorong'i. Yorug'likka tekis qarang.",
+  'face.tryPhoto': 'Sifatliroq rasm yuklash',
+  'face.tryCamera': 'Kamera bilan qayta olish',
+  'face.resultTitle': "Rasmda nima ko'rinadi",
+  'face.regionsCaption': 'Tahlil qilingan zonalar',
+  'face.metric.oiliness': "Yaltirash (yog'lilik)",
+  'face.metric.redness': 'Qizarish',
+  'face.metric.texture': 'Tekstura',
+  'face.metric.spots': "Qora dog'lar",
+  'face.metric.darkCircles': "Ko'z osti qorayishi",
+  'face.metric.evenness': 'Rang notekisligi',
+  'face.level.low': 'Past',
+  'face.level.moderate': "O'rtacha",
+  'face.level.high': 'Yuqori',
+  'face.desc.oiliness': 'Peshona va burundagi yaltiroq joylar.',
+  'face.desc.redness': 'Yonoq, burun va iyakdagi qizil tus.',
+  'face.desc.texture': 'Teri yuzasidagi mayda notekisliklar.',
+  'face.desc.spots': "Atrofidagi teridan to'qroq mayda dog'lar.",
+  'face.desc.darkCircles': "Ko'z osti yonoqqa nisbatan qanchalik to'qroq.",
+  'face.desc.evenness': "Och va to'q joylarning dog'-dog' ko'rinishi.",
+  'face.advice.oiliness':
+    "Yumshoq tozalovchi va yengil, g'ovak bekitmaydigan (non-comedogenic) krem yordam berishi mumkin; kun davomida yog' artuvchi qog'ozlar qulay.",
+  'face.advice.redness':
+    "Yumshoq, hidsiz mahsulotlarni tanlang va yangilarini avval kichik joyda sinab ko'ring. Qizarish uzoq davom etsa, qichisa yoki og'risa — dermatologga murojaat qiling.",
+  'face.advice.texture':
+    'Muntazam namlash va har kuni quyoshdan himoya yordam beradi; eksfoliantlarni asta-sekin boshlang.',
+  'face.advice.spots':
+    "Har kuni SPF 30+ dog'lar to'qlashishining oldini olishga yordam beradi. O'zgarayotgan dog' haqida dermatologdan so'rang.",
+  'face.advice.darkCircles':
+    "Uyqu va yumshoq ko'z kremi yordam berishi mumkin; irsiyat va yorug'lik ham katta rol o'ynaydi.",
+  'face.advice.evenness':
+    "Har kungi quyoshdan himoya va muntazam yumshoq parvarish vaqt o'tib rangni tekislashga yordam beradi.",
+  'face.notDiagnosis':
+    "Bu tashxis emas. Yorug'lik, kamera va pardoz natijani o'zgartiradi — bir xil sharoitda olingan skanlarni solishtiring.",
+  'face.save': 'Tarixga saqlash',
+  'face.saved': 'Saqlandi ✓',
+  'face.again': 'Yangi skan',
+  'face.historyTitle': 'Tarix',
+  'face.historyEmpty':
+    "Hali saqlangan skan yo'q. Faqat raqamlar saqlanadi, rasm hech qachon saqlanmaydi.",
+  'face.source.photo': 'Rasm',
+  'face.source.camera': 'Kamera',
+  'face.delete': "Skanni o'chirish",
+  'face.deleteConfirm': "Bu skan tarixdan o'chirilsinmi?",
+  'camera.title': 'Rasmga olish',
+  'camera.hint': "Yuzingizni kadr markaziga keltiring va to'g'ri qarang.",
+  'camera.capture': 'Rasmga olish',
+  'camera.cancel': 'Bekor qilish',
+  'camera.denied':
+    "Kameraga ruxsat berilmagan. System Settings → Privacy & Security → Camera bo'limida ruxsat bering va qayta urinib ko'ring.",
+  'camera.notFound': 'Kamera topilmadi.',
+  'camera.error': "Kamerani ishga tushirib bo'lmadi. O'rniga rasm yuklab ko'ring."
 }

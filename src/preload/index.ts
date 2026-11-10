@@ -12,6 +12,13 @@ import type {
 } from '../shared/analysis'
 import type { RoutineSlot, Routines } from '../shared/routine'
 import type { ClassifyResult } from '../shared/classifier'
+import type {
+  FaceAnalysisResult,
+  RawFaceMetrics,
+  SavedFaceScan,
+  ScanSource
+} from '../shared/faceScan'
+import type { FaceRegion } from '../shared/faceGeometry'
 
 // Renderer'ga beriladigan API — renderer faqat shu funksiyalar orqali main bilan gaplashadi
 const api = {
@@ -45,6 +52,22 @@ const api = {
       ipcRenderer.invoke('ai:latestAnalysis', productId),
     keyStatus: (): Promise<AiKeyStatus> => ipcRenderer.invoke('ai:keyStatus'),
     setKey: (key: string | null): Promise<void> => ipcRenderer.invoke('ai:setKey', key)
+  },
+  face: {
+    modelBytes: (): Promise<Uint8Array | null> => ipcRenderer.invoke('face:modelBytes'), // MediaPipe modeli
+    analyze: (input: {
+      width: number
+      height: number
+      rgba: Uint8Array
+      regions: FaceRegion[]
+    }): Promise<FaceAnalysisResult> => ipcRenderer.invoke('face:analyze', input), // Faqat kesilgan yuz piksellari
+    save: (input: {
+      source: ScanSource
+      qualityScore: number
+      raw: RawFaceMetrics
+    }): Promise<SavedFaceScan> => ipcRenderer.invoke('face:save', input), // Faqat raqamlar saqlanadi
+    list: (): Promise<SavedFaceScan[]> => ipcRenderer.invoke('face:list'),
+    remove: (id: number): Promise<void> => ipcRenderer.invoke('face:delete', id)
   },
   routines: {
     get: (): Promise<Routines> => ipcRenderer.invoke('routines:get'),

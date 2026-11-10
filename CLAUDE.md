@@ -90,13 +90,18 @@ resources/models/ → product_classifier.onnx
 | `ml-pipeline` | Colab notebooks: dataset → train → evaluate → ONNX |
 | `testing` | Writing or running Vitest tests (SQLite ABI note, Gemini mocks) |
 | `release-check` | Before building a release |
+| `verification-before-completion` | Before saying anything is done/fixed/passing — run the command, read the output first (obra/superpowers) |
+| `code-review` | Reviewing changes since a commit: Standards (this file) + Spec (`ai-docs/`) (mattpocock/skills) |
+| `differential-review` | Security review of a diff — IPC, file/image input, API key, SQL, native modules (trailofbits/skills) |
+
+Third-party skills live in `.agents/skills/` (symlinked into `.claude/skills/`), pinned in `skills-lock.json`.
 
 ## 9. Important environment notes
 
 - Alisher's machine: macOS (Apple Silicon, arm64).
 - Run `yarn`, `electron`, `electron-rebuild`, and builds **in Alisher's Mac terminal** (native modules
   must be built for macOS arm64). Claude may create/edit text files directly.
-- Git: Alisher will run `git init` at the end of the project.
+- Git: repo https://github.com/Alisherbakh/glowlab (branch `master`). Alisher commits/pushes in his terminal; one commit per stage (Conventional Commits).
 
 ## 10. After finishing a task
 

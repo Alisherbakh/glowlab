@@ -15,8 +15,12 @@
 
 - [ ] Stage 10 check: `yarn add onnxruntime-node@^1.31.1` (or `yarn install`) → `yarn dev` → Shelf → Add product → "Suggest type from a photo": a clear serum/sunscreen photo → suggestion + "Use this"; a random non-cosmetic photo → "not sure"; a tiny/blurry photo → quality message.
 
+- [ ] Stage 11 check: `yarn install` (adds @mediapipe/tasks-vision, @techstark/opencv-js) → `yarn dev` → Face scan: (1) clear selfie in daylight → results + region circles on forehead/cheeks/nose/chin/under-eyes; (2) blurry / dark / turned head / two people → quality message; (3) camera → macOS asks permission once → capture works; (4) Save → appears in History; restart → still there. Send screenshots so thresholds can be calibrated.
+- [ ] Calibrate face metric ranges (`main/ai/faceMetrics.ts` → `scale(...)` limits, `BLUR_MIN`, `SIDE_DIFF_MAX`) on 5–10 real photos in different light.
+- [ ] Small: `formatDate` with `uz-UZ` renders like "2026 M11 10" in Chromium → use a custom Uzbek month format.
+
 ## Next
-✅ After Stage 7 + 8 + 10 checks pass → **Stage 11 — Face analysis** (Quality Gate + MediaPipe + OpenCV.js, age range + skin type from profile, AI disclaimer).
+✅ After the checks → **Stage 12 — Skin diary + progress chart** (diary_entries linked to face_scans, notes, chart of the 6 metrics over time).
 Stage 15 note: in the mac build, exclude non-mac onnxruntime binaries (`bin/napi-v6/{win32,linux}`) to save ~200 MB.
 
 ## Roadmap overview

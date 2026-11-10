@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, session } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -6,6 +6,28 @@ import { registerIpcHandlers } from './ipc'
 import { initDatabase, closeDatabase } from './db/connection'
 import { getDataPaths } from './db/paths'
 import { startExpiryReminders, stopExpiryReminders } from './jobs/expiryReminder'
+import { stopFaceWorker } from './ai/faceAnalyzer'
+
+// So'rov ilovaning o'z sahifasidanmi (dev: Vite server, build: file://)
+function isAppUrl(url: string): boolean {
+  const devUrl = process.env['ELECTRON_RENDERER_URL']
+  if (is.dev && devUrl) return url.startsWith(new URL(devUrl).origin)
+  return url.startsWith('file://')
+}
+
+// Ruxsatlar: faqat yuz skani uchun kamera (video, mikrofonsiz) va faqat o'z sahifamizga; qolgani rad etiladi
+function setupPermissions(): void {
+  session.defaultSession.setPermissionRequestHandler((_wc, permission, callback, details) => {
+    if (permission === 'media') {
+      const types = 'mediaTypes' in details ? (details.mediaTypes ?? []) : []
+      callback(
+        types.length > 0 && types.every((t) => t === 'video') && isAppUrl(details.requestingUrl)
+      )
+      return
+    }
+    callback(false)
+  })
+}
 
 // Asosiy oynani yaratadi
 function createWindow(): void {
@@ -66,6 +88,7 @@ app.whenReady().then(() => {
   initDatabase(dbFile) // Bazani ochamiz + migratsiyalar
 
   registerIpcHandlers() // Barcha IPC kanallarni ulaymiz (oyna ochilishidan oldin)
+  setupPermissions() // Kamera ruxsati (faqat video, faqat ilova oynasi)
 
   createWindow()
   startExpiryReminders() // Muddat eslatmalari (5 s keyin, so'ng har 6 soatda)
@@ -79,6 +102,7 @@ app.whenReady().then(() => {
 // Ilovadan chiqishdan oldin bazani yopamiz (WAL fayllari to'g'ri yakunlanadi)
 app.on('will-quit', () => {
   stopExpiryReminders()
+  void stopFaceWorker() // OpenCV worker oqimini to'xtatamiz
   closeDatabase()
 })
 
