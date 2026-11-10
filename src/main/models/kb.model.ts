@@ -72,3 +72,18 @@ export function searchKbFts(ftsQuery: string, limit: number): KbChunkRow[] {
     )
     .all(ftsQuery, limit) as KbChunkRow[]
 }
+
+// slug ro'yxati bo'yicha bo'laklar (moslik tekshiruvi manbalari)
+export function findKbChunksBySlugs(slugs: string[]): KbChunkRow[] {
+  if (slugs.length === 0) return []
+  const marks = slugs.map(() => '?').join(', ')
+  return getDb()
+    .prepare(`SELECT id, slug, title, text, source, url FROM kb_chunks WHERE slug IN (${marks})`)
+    .all(...slugs) as KbChunkRow[]
+}
+
+// Takrorlanmaydigan manba sahifalari soni
+export function countKbSources(): number {
+  return (getDb().prepare('SELECT COUNT(DISTINCT url) AS n FROM kb_chunks').get() as { n: number })
+    .n
+}

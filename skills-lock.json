@@ -13,6 +13,12 @@
       "skillPath": "plugins/differential-review/skills/differential-review/SKILL.md",
       "computedHash": "3c330b7d8e2a7a6bba9ff9c7f9971d3b6c17fef84b9382efdd325abdd481371c"
     },
+    "playwright-testing": {
+      "source": "laurigates/claude-plugins",
+      "sourceType": "github",
+      "skillPath": "testing-plugin/skills/playwright-testing/SKILL.md",
+      "computedHash": "50c1491f2dfb4ad0b759af8f5178dba1a0d441f6ee2062811d85ff925dcddea1"
+    },
     "verification-before-completion": {
       "source": "obra/superpowers",
       "sourceType": "github",

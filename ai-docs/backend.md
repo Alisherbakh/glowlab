@@ -46,7 +46,8 @@ Status: created in `001_init.sql` (Stage 3): skin_profile, products, ingredients
 | `ai:latestAnalysis` ✅ | Latest saved analysis of a product |
 | `ai:keyStatus` ✅, `ai:setKey` ✅ | API key status / save (safeStorage) — key never returned |
 | `ai:classifyProduct` ✅ | Photo → product type (ONNX) |
-| `ai:checkCompatibility` | Product compatibility |
+| `ai:checkCompatibility` ✅ | Rule-based AM/PM routine compatibility (sources from kb.json) |
+| `ai:labInfo` ✅ | AI Lab data: metrics.json, Grad-CAM images, RAG status |
 | `face:saveScan`, `face:history` | Face scan results |
 | `routines:get` ✅, `routines:save` ✅ | AM/PM routine (whole slot replaced in one transaction) |
 | `diary:list`, `diary:create` | Diary |

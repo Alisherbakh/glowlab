@@ -373,5 +373,92 @@ export const ko: Record<TranslationKey, string> = {
   'ask.sources': '출처',
   'ask.search.semantic': '의미 검색',
   'ask.search.keyword': '키워드 검색',
-  'ask.openSource': '브라우저에서 열림'
+  'ask.openSource': '브라우저에서 열림',
+  'compat.title': '궁합 체크',
+  'compat.subtitle':
+    '스캔한 성분표와 제품 이름으로 루틴을 규칙 기반으로 확인합니다. 오프라인에서 작동합니다.',
+  'compat.counts': '성분 스캔: {checked}개 중 {scanned}개',
+  'compat.empty': '루틴에 제품을 추가하면 여기에서 확인 결과가 표시됩니다.',
+  'compat.allClear': '규칙상 문제가 발견되지 않았습니다.',
+  'compat.error': '확인하지 못했습니다. 다시 시도하세요.',
+  'compat.fromName': '제품 이름에서 감지',
+  'compat.disclaimer':
+    '의학적 조언이나 AI가 아니라, 표시된 출처를 바탕으로 한 간단한 규칙입니다. 스캔한 성분과 제품 이름만 확인하므로 놓치는 부분이 있을 수 있습니다. 확실하지 않으면 피부과 전문의와 상담하세요.',
+  'compat.rule.retinoid_morning.title': '아침 루틴에 레티노이드',
+  'compat.rule.retinoid_morning.body':
+    '레티노이드는 햇빛 민감도를 높이기 때문에 피부과 전문의들은 밤에만 사용하라고 권합니다. 이 제품들을 저녁 루틴으로 옮기세요.',
+  'compat.rule.no_sunscreen.title': '아침 루틴에 자외선 차단제 없음',
+  'compat.rule.no_sunscreen.body':
+    'FDA와 AAD는 레티노이드, AHA, BHA를 사용하는 동안 자외선 차단을 권합니다. 아침 루틴 마지막 단계에 SPF 30 이상 광범위 차단제를 추가하세요.',
+  'compat.rule.irritant_stack.title': '한 루틴에 강한 성분 여러 개',
+  'compat.rule.irritant_stack.body':
+    '레티노이드, AHA, BHA는 각각 피부를 자극할 수 있고, 과도한 각질 제거는 피부 장벽을 손상시킬 수 있습니다. 한 루틴에 여러 개가 있으면 어떤 제품 때문에 반응이 생겼는지 알기 어렵습니다. 하나씩 추가하고, 새 제품은 패치 테스트를 하고, 자극이 있으면 중단하세요.',
+  'compat.rule.dry_skin_irritants.title': '건성 피부에 맞지 않을 수 있는 성분',
+  'compat.rule.dry_skin_irritants.body':
+    '프로필에 건성 피부로 되어 있습니다. 피부과 전문의들은 건성 피부에 알코올, 향료, 레티노이드가 든 제품을 피하라고 권합니다.',
+  'compat.rule.sensitive_irritants.title': '민감성 피부에 맞지 않을 수 있는 성분',
+  'compat.rule.sensitive_irritants.body':
+    '프로필에 민감성 피부로 되어 있습니다. 피부과 전문의들은 민감성 피부에 알코올, 향료, 알파 하이드록시산(AHA)을 피하라고 권합니다.',
+  'compat.rule.unscanned.title': '성분이 스캔되지 않음',
+  'compat.rule.unscanned.body':
+    "이 제품들은 스캔된 성분표가 없어 확인이 완전하지 않습니다. 전체 확인을 위해 '내 화장대'에서 라벨을 스캔하세요.",
+  'lab.intro':
+    'GlowLab의 AI 기능이 어떻게 작동하고 얼마나 정확한지 보여줍니다. 모든 수치는 앱의 모델 파일과 데이터베이스에서 가져옵니다.',
+  'lab.error': 'AI Lab 데이터를 불러오지 못했습니다. 앱을 다시 시작해 보세요.',
+  'lab.clf.missing': '제품 분류 모델 지표(metrics.json)를 찾지 못했습니다.',
+  'lab.clf.title': '제품 종류 분류 모델 (직접 학습)',
+  'lab.clf.desc':
+    'ImageNet으로 학습된 MobileNetV2를 Colab에서 PyTorch로 전이 학습하고 ONNX로 변환해 onnxruntime-node로 오프라인 실행합니다. 입력: 224×224 사진. 사진은 컴퓨터 밖으로 나가지 않습니다.',
+  'lab.clf.accuracy': '테스트 정확도',
+  'lab.clf.testImages': '테스트 이미지',
+  'lab.clf.classes': '클래스',
+  'lab.clf.threshold': '앱 신뢰도 임계값',
+  'lab.clf.recallTitle': '클래스별 정답률 (재현율)',
+  'lab.clf.cmTitle': '혼동 행렬 (테스트셋)',
+  'lab.clf.cmAxes': '실제 ↓ / 예측 →',
+  'lab.clf.cmCaption':
+    '행: 실제 종류, 열(1–6, 같은 순서): 모델 예측. 색이 진할수록 그 행에서 비율이 큽니다. 테두리 칸은 오답입니다.',
+  'lab.clf.cmTrue': '실제',
+  'lab.clf.cmPred': '예측',
+  'lab.clf.worst': '가장 많은 오답: {from}을(를) {to}(으)로 예측 ({n}장).',
+  'lab.clf.thresholdNote':
+    '검증셋에서 정한 임계값은 {model}%였지만 랜덤 노이즈도 한 클래스에 약 40%가 나와서, 앱은 {app}% 이상일 때만 종류를 추천하고 그 외에는 "잘 모르겠어요"라고 답합니다.',
+  'lab.clf.dataNote':
+    '학습·테스트 이미지는 배경이 비슷한 공개 CC BY 4.0 Roboflow 데이터셋 2개에서 가져왔고, 데이터 누수를 막기 위해 원본 사진 기준으로 나눴습니다. 집에서 찍은 실제 사진은 테스트 정확도보다 낮게 나올 가능성이 높습니다.',
+  'lab.clf.gradcamTitle': 'Grad-CAM: 모델이 보는 위치',
+  'lab.clf.gradcamDesc':
+    '따뜻한 색 영역이 예측에 가장 큰 영향을 주었습니다 (클래스별 테스트 이미지 1장).',
+  'lab.face.title': '얼굴 분석 (기기 내 컴퓨터 비전)',
+  'lab.face.chip1': 'MediaPipe Face Landmarker · 478개 포인트',
+  'lab.face.chip2': '워커 스레드의 OpenCV.js',
+  'lab.face.chip3': '오프라인 · 사진 저장 안 함',
+  'lab.face.s1': 'MediaPipe가 앱 화면에서 얼굴과 478개 랜드마크를 찾습니다.',
+  'lab.face.s2':
+    '품질 검사에서 얼굴 없음, 여러 명, 작거나 돌아간 얼굴, 흐림, 너무 어둡거나 밝은 조명, 고르지 않은 조명을 걸러내고, 추측하는 대신 더 좋은 사진을 요청합니다.',
+  'lab.face.s3':
+    'OpenCV가 랜드마크 기준 고정 영역에서 6가지 지표를 측정합니다: 번들거림, 붉은기, 결, 잡티, 눈 밑 어두움, 고르지 않은 톤.',
+  'lab.face.s4': '낮음/보통/높음 단계는 피부 타입과 나이대에 따라 조정된 기준을 사용합니다.',
+  'lab.face.note':
+    '보이는 특징을 대략적으로 측정한 값이며 진단이 아니고 임상적으로 검증되지 않았습니다. 조명에 따라 수치가 달라지므로 비슷한 조명에서 찍은 스캔끼리 비교하세요.',
+  'lab.rag.title': 'GlowLab에 질문 (RAG: 임베딩 + 벡터 검색)',
+  'lab.rag.chunks': '{pages}개 페이지의 {chunks}개 문단',
+  'lab.rag.ready': '벡터 준비됨',
+  'lab.rag.notYet': '첫 질문 때 벡터를 계산합니다',
+  'lab.rag.noVec': '벡터 확장 미로드 · 키워드 검색',
+  'lab.rag.s1': 'AAD, FDA, Skin Cancer Foundation 자료에서 정리한 문단을 SQLite에 저장합니다.',
+  'lab.rag.s2':
+    '문단과 질문을 정규화된 임베딩 벡터로 바꾸고, sqlite-vec이 코사인 거리로 가장 가까운 {k}개 문단을 찾습니다.',
+  'lab.rag.s3':
+    '거리 {d}보다 먼 문단은 제외하고, 가까운 문단이 없으면 지식 베이스에 답이 없다고 알려줍니다.',
+  'lab.rag.s4':
+    'Gemini는 그 문단만으로 [n] 출처와 함께 답을 쓰며, 유효한 출처가 없는 답은 거절됩니다. 오프라인에서는 SQLite FTS5 키워드 검색으로 관련 문단을 보여줍니다.',
+  'lab.rag.note': '동의 후 질문 텍스트만 Google로 전송됩니다.',
+  'lab.compat.title': '루틴 궁합 체크',
+  'lab.compat.rules': '규칙 {count}개',
+  'lab.compat.offline': '규칙 기반 · 오프라인',
+  'lab.compat.s1':
+    '스캔한 성분표(INCI 이름)에서, 라벨을 스캔하지 않았다면 제품 이름에서 활성 성분을 찾습니다.',
+  'lab.compat.s2': '각 규칙은 지식 베이스의 출처 페이지와 연결되어 결과와 함께 표시됩니다.',
+  'lab.compat.note':
+    '이 기능은 의도적으로 AI를 쓰지 않았습니다. 단순한 규칙은 예측 가능하고 검증하기 쉽습니다.'
 }

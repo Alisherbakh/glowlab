@@ -19,6 +19,7 @@ import WbSunnyOutlined from '@mui/icons-material/WbSunnyOutlined'
 import { getExpiryStatus } from '../../../shared/products'
 import { MAX_ROUTINE_STEPS, type RoutineSlot, type Routines } from '../../../shared/routine'
 import type { TranslationKey } from '../i18n'
+import { CompatCard } from '../components/CompatCard'
 import { ExpiryBadge } from '../components/ExpiryBadge'
 import { useNavigate } from '../hooks/navContext'
 import { useProducts } from '../hooks/useProducts'
@@ -31,6 +32,7 @@ export function RoutinePage(): React.JSX.Element {
   const { products, loading } = useProducts()
   const [routines, setRoutines] = useState<Routines | null>(null)
   const [error, setError] = useState(false)
+  const [version, setVersion] = useState(0) // Har saqlashda oshadi → moslik qayta tekshiriladi
 
   useEffect(() => {
     let active = true
@@ -48,6 +50,7 @@ export function RoutinePage(): React.JSX.Element {
     setError(false)
     try {
       setRoutines(await window.api.routines.save(slot, ids))
+      setVersion((v) => v + 1)
     } catch {
       setError(true)
     }
@@ -221,6 +224,7 @@ export function RoutinePage(): React.JSX.Element {
           )
         })}
       </Box>
+      <CompatCard version={version} />
     </Stack>
   )
 }

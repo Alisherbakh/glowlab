@@ -373,7 +373,96 @@ export const en = {
   'ask.sources': 'Sources',
   'ask.search.semantic': 'Semantic search',
   'ask.search.keyword': 'Keyword search',
-  'ask.openSource': 'opens in your browser'
+  'ask.openSource': 'opens in your browser',
+  'compat.title': 'Compatibility check',
+  'compat.subtitle':
+    'Rule-based check of your routines using scanned ingredient lists and product names. Works offline.',
+  'compat.counts': 'Ingredients scanned: {scanned} of {checked}',
+  'compat.empty': 'Add products to a routine and the check will appear here.',
+  'compat.allClear': 'No issues found by the rules.',
+  'compat.error': "Couldn't run the check. Try again.",
+  'compat.fromName': 'detected from the name',
+  'compat.disclaimer':
+    'Not medical advice and not AI — simple rules based on the sources shown. Only scanned ingredients and product names are checked, so it can miss things. If unsure, ask a dermatologist.',
+  'compat.rule.retinoid_morning.title': 'Retinoid in the morning',
+  'compat.rule.retinoid_morning.body':
+    'Dermatologists advise using retinoids only at night because they increase sun sensitivity. Move these products to the evening routine.',
+  'compat.rule.no_sunscreen.title': 'No sunscreen in the morning',
+  'compat.rule.no_sunscreen.body':
+    'FDA and AAD advise sun protection while using retinoids, AHAs or BHA. Add a broad-spectrum SPF 30+ sunscreen as the last morning step.',
+  'compat.rule.irritant_stack.title': 'Several strong actives in one routine',
+  'compat.rule.irritant_stack.body':
+    'Retinoids, AHAs and BHA can each irritate the skin, and overdoing exfoliation can damage the skin barrier. With several in one routine it is hard to tell which one causes a reaction: introduce one at a time, patch test new products, and stop if irritation occurs.',
+  'compat.rule.dry_skin_irritants.title': 'Ingredients dry skin may not like',
+  'compat.rule.dry_skin_irritants.body':
+    'Your profile says your skin is dry. For dry skin, dermatologists suggest avoiding products with alcohol, fragrance and retinoids.',
+  'compat.rule.sensitive_irritants.title': 'Ingredients sensitive skin may not like',
+  'compat.rule.sensitive_irritants.body':
+    'Your profile says your skin is sensitive. Dermatologists suggest avoiding alcohol, fragrance and alpha hydroxy acids (AHAs) for sensitive skin.',
+  'compat.rule.unscanned.title': 'Ingredients not scanned',
+  'compat.rule.unscanned.body':
+    'These products have no scanned ingredient list, so the check is incomplete. Scan their labels on the My shelf page for a full check.',
+  'lab.intro':
+    "How the AI parts of GlowLab work and how accurate they are. All numbers come from the app's own model files and database.",
+  'lab.error': "Couldn't load AI Lab data. Restart the app and try again.",
+  'lab.clf.missing': 'Product classifier metrics (metrics.json) were not found.',
+  'lab.clf.title': 'Product type classifier (own model)',
+  'lab.clf.desc':
+    'MobileNetV2 (ImageNet weights) fine-tuned with PyTorch in Colab, exported to ONNX and run offline with onnxruntime-node. Input: 224×224 photo. The photo never leaves the computer.',
+  'lab.clf.accuracy': 'Test accuracy',
+  'lab.clf.testImages': 'Test images',
+  'lab.clf.classes': 'Classes',
+  'lab.clf.threshold': 'Confidence threshold in app',
+  'lab.clf.recallTitle': 'Correct per class (recall)',
+  'lab.clf.cmTitle': 'Confusion matrix (test set)',
+  'lab.clf.cmAxes': 'true ↓ / predicted →',
+  'lab.clf.cmCaption':
+    "Rows: real type, columns (1–6, same order): model's answer. Darker = larger share of that row; outlined cells are mistakes.",
+  'lab.clf.cmTrue': 'True',
+  'lab.clf.cmPred': 'Predicted',
+  'lab.clf.worst': 'Most common mistake: {from} recognised as {to} ({n} images).',
+  'lab.clf.thresholdNote':
+    'The threshold chosen on the validation set was {model}%, but even random noise got about 40% for one class, so the app only suggests a type at {app}% or higher and says "not sure" otherwise.',
+  'lab.clf.dataNote':
+    'Training and test images come from two public CC BY 4.0 Roboflow datasets with similar backgrounds, split by source photo to avoid leakage. Real photos at home will likely score lower than the test accuracy.',
+  'lab.clf.gradcamTitle': 'Grad-CAM: where the model looks',
+  'lab.clf.gradcamDesc': 'Warm areas influenced the prediction most (one test image per class).',
+  'lab.face.title': 'Face analysis (on-device computer vision)',
+  'lab.face.chip1': 'MediaPipe Face Landmarker · 478 points',
+  'lab.face.chip2': 'OpenCV.js in a worker thread',
+  'lab.face.chip3': 'Offline · photo not saved',
+  'lab.face.s1': 'MediaPipe finds the face and 478 landmarks in the app window.',
+  'lab.face.s2':
+    'A quality gate rejects photos with no face, several faces, a small or turned face, blur, too dark or too bright light, or uneven light — and asks for a better photo instead of guessing.',
+  'lab.face.s3':
+    'OpenCV measures 6 indicators in fixed regions placed on the landmarks: shine, redness, texture, dark spots, under-eye darkness and uneven tone.',
+  'lab.face.s4':
+    'Low / moderate / high levels use thresholds shifted by your skin type and age range.',
+  'lab.face.note':
+    'These are heuristic measurements of visible features, not a diagnosis, and they are not clinically validated. Lighting changes the numbers, so compare scans taken in similar light.',
+  'lab.rag.title': 'Ask GlowLab (RAG: embeddings + vector search)',
+  'lab.rag.chunks': '{chunks} passages from {pages} pages',
+  'lab.rag.ready': 'Vectors ready',
+  'lab.rag.notYet': 'Vectors are computed on the first question',
+  'lab.rag.noVec': 'Vector extension not loaded · keyword search',
+  'lab.rag.s1':
+    'Curated passages from AAD, FDA and Skin Cancer Foundation pages are stored in SQLite.',
+  'lab.rag.s2':
+    'Passages and your question are turned into normalized embedding vectors; sqlite-vec finds the {k} closest passages by cosine distance.',
+  'lab.rag.s3':
+    "Passages farther than distance {d} are dropped; if none is close, GlowLab says the answer isn't in its knowledge base.",
+  'lab.rag.s4':
+    'Gemini writes the answer only from those passages with [n] citations; answers without a valid citation are rejected. Offline, SQLite FTS5 keyword search shows matching passages.',
+  'lab.rag.note': 'Only the question text is sent to Google, after your consent.',
+  'lab.compat.title': 'Routine compatibility check',
+  'lab.compat.rules': '{count} rules',
+  'lab.compat.offline': 'Rule-based · offline',
+  'lab.compat.s1':
+    "Active ingredients are detected from scanned ingredient lists (INCI names), or from the product name if the label wasn't scanned.",
+  'lab.compat.s2':
+    'Each rule is tied to a source page in the knowledge base, which is shown with the result.',
+  'lab.compat.note':
+    'This part is deliberately not AI: simple rules are predictable and easy to check.'
 } as const
 
 export type TranslationKey = keyof typeof en

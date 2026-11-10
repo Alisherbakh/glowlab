@@ -382,5 +382,96 @@ export const uz: Record<TranslationKey, string> = {
   'ask.sources': 'Manbalar',
   'ask.search.semantic': 'Semantik qidiruv',
   'ask.search.keyword': "Kalit so'z qidiruvi",
-  'ask.openSource': 'brauzerda ochiladi'
+  'ask.openSource': 'brauzerda ochiladi',
+  'compat.title': 'Moslik tekshiruvi',
+  'compat.subtitle':
+    "Tartiblaringiz qoidalar asosida tekshiriladi: skan qilingan tarkib va mahsulot nomlari bo'yicha. Oflayn ishlaydi.",
+  'compat.counts': 'Tarkibi skan qilingan: {checked} tadan {scanned} ta',
+  'compat.empty': "Tartibga mahsulot qo'shing — tekshiruv shu yerda chiqadi.",
+  'compat.allClear': "Qoidalar bo'yicha muammo topilmadi.",
+  'compat.error': "Tekshirib bo'lmadi. Qayta urinib ko'ring.",
+  'compat.fromName': 'nomidan aniqlandi',
+  'compat.disclaimer':
+    "Bu tibbiy maslahat emas va AI emas — ko'rsatilgan manbalarga asoslangan oddiy qoidalar. Faqat skan qilingan tarkib va mahsulot nomi tekshiriladi, shuning uchun hammasini topa olmasligi mumkin. Shubha bo'lsa, dermatologdan so'rang.",
+  'compat.rule.retinoid_morning.title': 'Ertalabki tartibda retinoid',
+  'compat.rule.retinoid_morning.body':
+    "Dermatologlar retinoidlarni faqat kechqurun ishlatishni maslahat beradi, chunki ular teri quyoshga sezuvchanligini oshiradi. Bu mahsulotlarni kechki tartibga o'tkazing.",
+  'compat.rule.no_sunscreen.title': "Ertalab quyoshdan himoya kremi yo'q",
+  'compat.rule.no_sunscreen.body':
+    "FDA va AAD retinoid, AHA yoki BHA ishlatayotganda quyoshdan himoyalanishni maslahat beradi. Ertalabki tartibning oxirgi qadami sifatida SPF 30+ keng spektrli himoya kremini qo'shing.",
+  'compat.rule.irritant_stack.title': 'Bitta tartibda bir nechta kuchli faol modda',
+  'compat.rule.irritant_stack.body':
+    "Retinoid, AHA va BHA'ning har biri terini tirnash qilishi mumkin, haddan tashqari eksfoliatsiya esa teri to'sig'iga zarar yetkazadi. Bitta tartibda bir nechtasi bo'lsa, reaksiya qaysi biridan ekanini bilish qiyin: ularni birma-bir kiriting, yangi mahsulotni avval sinab ko'ring (patch test) va tirnash bo'lsa to'xtating.",
+  'compat.rule.dry_skin_irritants.title': "Quruq teriga to'g'ri kelmasligi mumkin bo'lgan moddalar",
+  'compat.rule.dry_skin_irritants.body':
+    "Profilingizda teringiz quruq deb ko'rsatilgan. Quruq teri uchun dermatologlar spirt, atir va retinoidli mahsulotlardan qochishni maslahat beradi.",
+  'compat.rule.sensitive_irritants.title':
+    "Sezgir teriga to'g'ri kelmasligi mumkin bo'lgan moddalar",
+  'compat.rule.sensitive_irritants.body':
+    "Profilingizda teringiz sezgir deb ko'rsatilgan. Sezgir teri uchun dermatologlar spirt, atir va alfa-gidroksi kislotalardan (AHA) qochishni maslahat beradi.",
+  'compat.rule.unscanned.title': 'Tarkibi skan qilinmagan',
+  'compat.rule.unscanned.body':
+    "Bu mahsulotlarning tarkibi skan qilinmagan, shuning uchun tekshiruv to'liq emas. To'liq tekshiruv uchun \"Mening javonim\" sahifasida ularning yorlig'ini skan qiling.",
+  'lab.intro':
+    "GlowLab'ning AI qismlari qanday ishlashi va qanchalik aniqligi. Barcha raqamlar ilovaning o'z model fayllari va bazasidan olinadi.",
+  'lab.error': "AI Lab ma'lumotlarini yuklab bo'lmadi. Ilovani qayta ishga tushirib ko'ring.",
+  'lab.clf.missing': "Mahsulot klassifikatori ko'rsatkichlari (metrics.json) topilmadi.",
+  'lab.clf.title': "Mahsulot turini aniqlovchi model (o'z modelimiz)",
+  'lab.clf.desc':
+    "MobileNetV2 (ImageNet og'irliklari) Colab'da PyTorch bilan qayta o'qitilgan (transfer learning), ONNX'ga eksport qilingan va onnxruntime-node orqali oflayn ishlaydi. Kirish: 224×224 rasm. Rasm kompyuterdan chiqmaydi.",
+  'lab.clf.accuracy': 'Test aniqligi',
+  'lab.clf.testImages': 'Test rasmlari',
+  'lab.clf.classes': 'Sinflar',
+  'lab.clf.threshold': 'Ilovadagi ishonch chegarasi',
+  'lab.clf.recallTitle': "Har bir sinfda to'g'ri topilgani (recall)",
+  'lab.clf.cmTitle': "Confusion matrix (test to'plami)",
+  'lab.clf.cmAxes': 'haqiqiy ↓ / bashorat →',
+  'lab.clf.cmCaption':
+    "Qatorlar: haqiqiy tur, ustunlar (1–6, xuddi shu tartibda): model javobi. To'qroq = shu qatordagi ulush kattaroq; chegarali kataklar — xatolar.",
+  'lab.clf.cmTrue': 'Haqiqiy',
+  'lab.clf.cmPred': 'Bashorat',
+  'lab.clf.worst': "Eng ko'p uchragan xato: {from} → {to} deb topilgan ({n} ta rasm).",
+  'lab.clf.thresholdNote':
+    'Validatsiya to\'plamida tanlangan chegara {model}% edi, lekin hatto tasodifiy shovqin ham bitta sinfga taxminan 40% oldi. Shuning uchun ilova faqat {app}% va undan yuqori bo\'lsa tur taklif qiladi, aks holda "aniq emas" deydi.',
+  'lab.clf.dataNote':
+    "O'qitish va test rasmlari foni o'xshash ikkita ochiq (CC BY 4.0) Roboflow datasetidan olingan; ma'lumot sizib chiqmasligi uchun manba rasm bo'yicha ajratilgan. Uyda olingan haqiqiy rasmlarda natija test aniqligidan pastroq bo'lishi ehtimoli bor.",
+  'lab.clf.gradcamTitle': 'Grad-CAM: model rasmning qayeriga qaraydi',
+  'lab.clf.gradcamDesc':
+    "Issiq rangli joylar bashoratga eng ko'p ta'sir qilgan (har bir sinfdan bitta test rasmi).",
+  'lab.face.title': "Yuz tahlili (qurilmadagi kompyuter ko'rishi)",
+  'lab.face.chip1': 'MediaPipe Face Landmarker · 478 nuqta',
+  'lab.face.chip2': 'Alohida oqimda (worker) OpenCV.js',
+  'lab.face.chip3': 'Oflayn · rasm saqlanmaydi',
+  'lab.face.s1': 'MediaPipe ilova oynasida yuzni va 478 ta nuqtani topadi.',
+  'lab.face.s2':
+    "Sifat tekshiruvi yuz yo'q, bir nechta yuz, kichik yoki burilgan yuz, xira, juda qorong'i/yorug' yoki notekis yorug'likdagi rasmlarni rad etadi va taxmin qilish o'rniga yaxshiroq rasm so'raydi.",
+  'lab.face.s3':
+    "OpenCV nuqtalarga bog'langan sobit hududlarda 6 ta ko'rsatkichni o'lchaydi: yaltirash, qizarish, tekstura, dog'lar, ko'z osti qorayishi va notekis rang.",
+  'lab.face.s4':
+    "Past / o'rtacha / yuqori darajalar teri turingiz va yosh oralig'ingizga qarab siljitilgan chegaralardan foydalanadi.",
+  'lab.face.note':
+    "Bu ko'rinadigan belgilarning taxminiy o'lchovlari, tashxis emas va klinik jihatdan tasdiqlanmagan. Yorug'lik raqamlarni o'zgartiradi, shuning uchun o'xshash yorug'likda olingan skanlarni solishtiring.",
+  'lab.rag.title': "GlowLab'dan so'rang (RAG: embedding + vektor qidiruv)",
+  'lab.rag.chunks': '{pages} ta sahifadan {chunks} ta parcha',
+  'lab.rag.ready': 'Vektorlar tayyor',
+  'lab.rag.notYet': 'Vektorlar birinchi savolda hisoblanadi',
+  'lab.rag.noVec': "Vektor kengaytmasi yuklanmagan · kalit so'z qidiruvi",
+  'lab.rag.s1':
+    "AAD, FDA va Skin Cancer Foundation sahifalaridan tanlangan parchalar SQLite'da saqlanadi.",
+  'lab.rag.s2':
+    "Parchalar va savolingiz normallashtirilgan embedding vektorlarga aylantiriladi; sqlite-vec cosine masofa bo'yicha eng yaqin {k} ta parchani topadi.",
+  'lab.rag.s3':
+    "{d} dan uzoq parchalar tashlab yuboriladi; birortasi ham yaqin bo'lmasa, GlowLab javob bazada yo'qligini aytadi.",
+  'lab.rag.s4':
+    "Gemini javobni faqat shu parchalardan [n] havolalar bilan yozadi; haqiqiy havolasi yo'q javob rad etiladi. Oflayn rejimda SQLite FTS5 kalit so'z qidiruvi mos parchalarni ko'rsatadi.",
+  'lab.rag.note': "Google'ga faqat savol matni, sizning roziligingizdan keyin yuboriladi.",
+  'lab.compat.title': 'Tartib moslik tekshiruvi',
+  'lab.compat.rules': '{count} ta qoida',
+  'lab.compat.offline': 'Qoidaga asoslangan · oflayn',
+  'lab.compat.s1':
+    "Faol moddalar skan qilingan tarkibdan (INCI nomlari), yorliq skan qilinmagan bo'lsa mahsulot nomidan aniqlanadi.",
+  'lab.compat.s2':
+    "Har bir qoida bilimlar bazasidagi manba sahifaga bog'langan va natija bilan birga ko'rsatiladi.",
+  'lab.compat.note':
+    'Bu qism ataylab AI emas: oddiy qoidalar natijasini oldindan bilish va tekshirish oson.'
 }

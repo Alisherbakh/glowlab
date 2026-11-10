@@ -13,7 +13,7 @@ import { getProfile } from './profile.service'
 import { getSettings } from './settings.service'
 import { isVectorAvailable, keywordSearch, semanticSearch, type Embedder } from './kb.service'
 
-const TOP_K = 4 // Modelga beriladigan parchalar soni
+export const TOP_K = 4 // Modelga beriladigan parchalar soni
 // Cosine masofa chegarasi (0 = bir xil ma'no). Mac'dagi haqiqiy o'lchovlar: mos savollar 0.27–0.35,
 // aloqasiz savol ("Fransiya poytaxti") ≥ 0.53. Undan uzoq parchalar ko'rsatilmaydi va Gemini'ga yuborilmaydi
 export const MAX_DISTANCE = 0.45

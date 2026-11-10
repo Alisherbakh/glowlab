@@ -24,7 +24,11 @@
 - [x] Stage 13 check (done 2026-11-10: semantic answer with citations, unrelated question → not found without a Gemini call, offline → FTS5 passages): `yarn install` (adds sqlite-vec) → `yarn dev` → terminal shows `[db] migratsiya qo'llandi: 004_kb_search` and `[kb] bilim bazasi yangilandi: 26 ta bo'lak` (no `[kb] sqlite-vec yuklanmadi`). "GlowLab'dan so'rang": (1) with the key: tick consent → ask the 3 examples in Uzbek → answers with [1]/[2] + sources (click opens the browser); first question is slower (26 chunks embedded once); (2) "Fransiyaning poytaxti qaysi?" → "not found"; (3) Wi-Fi off → offline card with passages; (4) send the `[ask] distances …` lines from the terminal.
 
 ## Next
-✅ After the checks → **Stage 14 — Compatibility check + AI Lab** (`ai:checkCompatibility` for products; AI Lab page: model metrics, confusion matrix, Grad-CAM — see frontend.md / backend.md).
+- [ ] Stage 14 check: `yarn dev` → Tartib: put a retinol product in Ertalab → "Retinoid in the morning" + "No sunscreen"; move it to Kechqurun and add a sunscreen to Ertalab → warnings disappear; source links open the browser. AI Lab: numbers 97.8 % / 319, recall bars, confusion matrix (hover a cell), 5 Grad-CAM images.
+- [ ] Dataset: the serum class contains non-cosmetic images (a movie poster in the test set) → clean it in `01_dataset` and retrain (later, optional).
+
+## Next
+✅ After the checks → **Stage 15 — Tests, build (.dmg), README** (vitest for pure modules, electron-builder mac build excluding non-mac onnxruntime binaries, full README with screenshots + model card, merge develop → master).
 Stage 15 note: in the mac build, exclude non-mac onnxruntime binaries (`bin/napi-v6/{win32,linux}`) to save ~200 MB.
 
 ## Roadmap overview

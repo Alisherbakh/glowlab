@@ -21,6 +21,8 @@ import type {
 import type { FaceRegion } from '../shared/faceGeometry'
 import type { DiaryEntry, DiaryEntryInput } from '../shared/diary'
 import type { AskResult, KbStatus } from '../shared/ask'
+import type { CompatResult } from '../shared/compatibility'
+import type { LabInfo } from '../shared/aiLab'
 
 // Renderer'ga beriladigan API — renderer faqat shu funksiyalar orqali main bilan gaplashadi
 const api = {
@@ -53,7 +55,9 @@ const api = {
     latestAnalysis: (productId: number): Promise<SavedAnalysis | null> =>
       ipcRenderer.invoke('ai:latestAnalysis', productId),
     keyStatus: (): Promise<AiKeyStatus> => ipcRenderer.invoke('ai:keyStatus'),
-    setKey: (key: string | null): Promise<void> => ipcRenderer.invoke('ai:setKey', key)
+    setKey: (key: string | null): Promise<void> => ipcRenderer.invoke('ai:setKey', key),
+    checkCompatibility: (): Promise<CompatResult> => ipcRenderer.invoke('ai:checkCompatibility'), // Joriy tartib tekshiriladi
+    labInfo: (): Promise<LabInfo> => ipcRenderer.invoke('ai:labInfo') // AI Lab ma'lumotlari
   },
   face: {
     modelBytes: (): Promise<Uint8Array | null> => ipcRenderer.invoke('face:modelBytes'), // MediaPipe modeli

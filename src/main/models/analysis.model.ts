@@ -61,3 +61,19 @@ export function replaceProductIngredients(
     }
   })() // Hammasi yoki hech narsa (tranzaksiya)
 }
+
+// Bir nechta mahsulotning skan qilingan modda nomlari (moslik tekshiruvi uchun)
+export function findIngredientNamesByProducts(productIds: number[]): Map<number, string[]> {
+  const result = new Map<number, string[]>()
+  if (productIds.length === 0) return result
+  const marks = productIds.map(() => '?').join(', ')
+  const rows = getDb()
+    .prepare(
+      `SELECT pi.product_id, i.name FROM product_ingredients pi
+       JOIN ingredients i ON i.id = pi.ingredient_id
+       WHERE pi.product_id IN (${marks})`
+    )
+    .all(...productIds) as { product_id: number; name: string }[]
+  for (const r of rows) result.set(r.product_id, [...(result.get(r.product_id) ?? []), r.name])
+  return result
+}
