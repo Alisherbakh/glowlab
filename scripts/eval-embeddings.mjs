@@ -2,6 +2,7 @@
 // Embedding modellarini RAG bilim bazasida solishtiradi (ilova kodi ishlatilmaydi).
 // Lokal model:  node scripts/eval-embeddings.mjs --local <model papkasi> [--prefix e5]
 // Gemini:       GEMINI_API_KEY=... node scripts/eval-embeddings.mjs --gemini
+// Qo'shimcha:   --set dev|heldout|all · --multi (uz/ko sarlavhalar alohida vektor, ilovadagidek) · --aliases · --sweep · --verbose
 // Model papkasida: model_quantized.onnx, tokenizer.json, tokenizer_config.json
 import { readFileSync } from 'fs'
 import { createRequire } from 'module'
@@ -69,6 +70,53 @@ const QUESTIONS = [
   { lang: 'uz', q: 'Bugun ob-havo qanday?', ok: [] },
   { lang: 'ko', q: '김치찌개는 어떻게 만드나요?', ok: [] },
   { lang: 'uz', q: "Python'da ro'yxatni qanday saralash mumkin?", ok: [] }
+]
+
+// Nazorat to'plami: ko/uz sarlavhalar yozilishidan OLDIN tuzilgan (2026-11-11), sarlavhalar bularga moslanmagan.
+// Yaxshilanishni shu to'plamda tekshiramiz — yuqoridagi savollarda "o'quvchi o'z imtihonini tuzgan" xavfi bor
+const HELDOUT = [
+  { lang: 'ko', q: '자외선 차단제는 얼마나 자주 발라야 하나요?', ok: ['sunscreen-reapply'] },
+  { lang: 'ko', q: '얼굴에 선크림을 얼마나 많이 발라야 해요?', ok: ['sunscreen-basics'] },
+  { lang: 'ko', q: '새 화장품을 쓰기 전에 테스트하는 방법은?', ok: ['patch-test'] },
+  { lang: 'ko', q: '하루에 세수를 몇 번 해야 하나요?', ok: ['face-washing-frequency'] },
+  { lang: 'ko', q: '레티놀은 처음에 어떻게 사용해야 하나요?', ok: ['retinoid-how'] },
+  { lang: 'ko', q: '건성 피부는 샤워를 어떻게 해야 하나요?', ok: ['dry-skin-bathing'] },
+  { lang: 'ko', q: '지성 피부에 맞는 화장은?', ok: ['oily-skin-habits'] },
+  { lang: 'ko', q: '여드름 치료제는 효과가 나타나기까지 얼마나 걸리나요?', ok: ['acne-patience'] },
+  { lang: 'ko', q: '주사 피부가 심해지는 원인은 뭐예요?', ok: ['rosacea-triggers'] },
+  { lang: 'ko', q: '흑색종의 징후는 무엇인가요?', ok: ['melanoma-abcde'] },
+  { lang: 'ko', q: '화장품 유통기한이 있나요?', ok: ['cosmetic-shelf-life'] },
+  { lang: 'ko', q: '살리실산을 쓸 때 주의할 점은?', ok: ['bha-salicylic'] },
+  { lang: 'uz', q: 'Quyoshdan himoya kremini qancha surtish kerak?', ok: ['sunscreen-basics'] },
+  {
+    lang: 'uz',
+    q: 'Suzgandan keyin quyosh kremini qayta surtish kerakmi?',
+    ok: ['sunscreen-reapply']
+  },
+  { lang: 'uz', q: "Yuzni qanday yuvish to'g'ri?", ok: ['face-washing'] },
+  { lang: 'uz', q: 'Retinol nima?', ok: ['retinoid-what'] },
+  { lang: 'uz', q: 'Retinolni qanday boshlash kerak?', ok: ['retinoid-how'] },
+  { lang: 'uz', q: "Yog'li teri uchun qanday yuvish vositasi kerak?", ok: ['oily-skin-care'] },
+  {
+    lang: 'uz',
+    q: 'Sezgir teri uchun qanday krem tanlash kerak?',
+    ok: ['sensitive-skin-moisturizer', 'moisturizer-by-type']
+  },
+  { lang: 'uz', q: 'Husnbuzarni nima kuchaytiradi?', ok: ['acne-habits'] },
+  { lang: 'uz', q: 'Rozatsea uchun qanday mahsulotlar mos?', ok: ['rosacea-skin-care'] },
+  { lang: 'uz', q: "Qora dog'lar qancha vaqtda yo'qoladi?", ok: ['dark-spots-time'] },
+  { lang: 'uz', q: 'Melanoma belgilari qanday?', ok: ['melanoma-abcde'] },
+  { lang: 'uz', q: 'Kosmetikaning yaroqlilik muddati bormi?', ok: ['cosmetic-shelf-life'] },
+  { lang: 'en', q: 'How long should a shower be if I have dry skin?', ok: ['dry-skin-bathing'] },
+  { lang: 'en', q: 'Does glycolic acid make my skin burn more easily?', ok: ['aha-sun'] },
+  { lang: 'en', q: 'What order should I apply my skincare products in?', ok: ['routine-order'] },
+  { lang: 'en', q: 'Which moisturizer ingredients help dry skin?', ok: ['dry-skin-ingredients'] },
+  { lang: 'ko', q: '오늘 서울 날씨 어때요?', ok: [] },
+  { lang: 'ko', q: '비트코인 가격이 얼마예요?', ok: [] },
+  { lang: 'uz', q: 'Toshkentdan Samarqandgacha poyezd qancha yuradi?', ok: [] },
+  { lang: 'uz', q: 'zzzz qqqq', ok: [] },
+  { lang: 'en', q: 'Who won the football World Cup?', ok: [] },
+  { lang: 'en', q: 'asdfgh', ok: [] }
 ]
 
 function normalize(v) {
@@ -148,6 +196,12 @@ async function geminiEmbedder() {
   }
 }
 
+// Hujjat matni ilovadagi kb.service bilan bir xil bo'lishi kerak
+function docText(c, withAliases) {
+  const titles = withAliases && c.titles ? [c.titles.uz, c.titles.ko].filter(Boolean) : []
+  return [c.title, ...titles, c.text].join('\n')
+}
+
 async function main() {
   const args = process.argv.slice(2)
   const kb = JSON.parse(readFileSync(new URL('../resources/kb/kb.json', import.meta.url), 'utf8'))
@@ -158,22 +212,32 @@ async function main() {
         args.includes('--prefix') ? args[args.indexOf('--prefix') + 1] : ''
       )
 
+  // --set dev | heldout | all (standart: dev). --aliases: kb.json'dagi uz/ko sarlavhalar ham hujjat matniga qo'shiladi
+  const set = args.includes('--set') ? args[args.indexOf('--set') + 1] : 'dev'
+  const QS = set === 'heldout' ? HELDOUT : set === 'all' ? [...QUESTIONS, ...HELDOUT] : QUESTIONS
+  const withAliases = args.includes('--aliases')
+  // --multi: har bo'lakka bir nechta vektor (en / uz / ko sarlavha + matn), masofa = eng yaqini
+  const multi = args.includes('--multi')
   const t0 = Date.now()
-  const docs = await embedder.embed(
-    kb.chunks.map((c) => `${c.title}\n${c.text}`),
-    'RETRIEVAL_DOCUMENT'
+  const variants = kb.chunks.map((c) =>
+    multi && c.titles
+      ? [c.title, c.titles.uz, c.titles.ko].filter(Boolean).map((t) => `${t}\n${c.text}`)
+      : [docText(c, withAliases)]
   )
+  const flat = await embedder.embed(variants.flat(), 'RETRIEVAL_DOCUMENT')
+  let pos = 0
+  const docs = variants.map((v) => v.map(() => flat[pos++]))
   const docMs = Date.now() - t0
   const t1 = Date.now()
   const queries = await embedder.embed(
-    QUESTIONS.map((x) => x.q),
+    QS.map((x) => x.q),
     'RETRIEVAL_QUERY'
   )
-  const queryMs = (Date.now() - t1) / QUESTIONS.length
+  const queryMs = (Date.now() - t1) / QS.length
 
-  const rows = QUESTIONS.map((x, i) => {
+  const rows = QS.map((x, i) => {
     const ranked = kb.chunks
-      .map((c, j) => ({ id: c.id, d: distance(queries[i], docs[j]) }))
+      .map((c, j) => ({ id: c.id, d: Math.min(...docs[j].map((v) => distance(queries[i], v))) }))
       .sort((a, b) => a.d - b.d)
     const top4 = ranked.slice(0, 4)
     return {
@@ -191,7 +255,9 @@ async function main() {
 
   const related = rows.filter((r) => r.ok.length)
   const unrelated = rows.filter((r) => !r.ok.length)
-  console.log(`\n=== ${embedder.name} ===`)
+  console.log(
+    `\n=== ${embedder.name} · ${set}${withAliases ? ' · aliases' : ''}${multi ? ' · multi' : ''} ===`
+  )
   console.log(`hujjatlar: ${docMs} ms (26 ta) · savol: ${queryMs.toFixed(0)} ms`)
   for (const lang of ['en', 'uz', 'ko']) {
     const r = related.filter((x) => x.lang === lang)
@@ -220,6 +286,20 @@ async function main() {
   console.log(
     `eng yaxshi nisbiy farq ≈ ${bestM.m.toFixed(3)}: mos ${bestM.kept}/${related.length} o'tadi, aloqasiz ${bestM.rejected}/${unrelated.length} rad etiladi`
   )
+  // Ilovadagi qiymat bilan (ask.service MIN_MARGIN): --margin 0.023
+  const fixedM = args.includes('--margin') ? Number(args[args.indexOf('--margin') + 1]) : 0.023
+  console.log(
+    `nisbiy farq ${fixedM}: mos ${related.filter((r) => r.margin >= fixedM).length}/${related.length} o'tadi (top-4 da to'g'ri parcha bilan: ${related.filter((r) => r.margin >= fixedM && r.hit4).length}), aloqasiz ${unrelated.filter((r) => r.margin < fixedM).length}/${unrelated.length} rad etiladi`
+  )
+  if (args.includes('--sweep')) {
+    for (let m = 0.01; m <= 0.04001; m += 0.002) {
+      const kept = related.filter((r) => r.margin >= m).length
+      const rej = unrelated.filter((r) => r.margin < m)
+      console.log(
+        `  m=${m.toFixed(3)} mos ${kept}/${related.length} · aloqasiz rad ${rej.length}/${unrelated.length}`
+      )
+    }
+  }
   let best = { t: 0, score: -1 }
   for (let t = 0.05; t <= 0.8; t += 0.005) {
     const kept = related.filter((r) => r.bestOk <= t).length
@@ -234,7 +314,7 @@ async function main() {
   if (args.includes('--verbose')) {
     for (const r of rows) {
       console.log(
-        `${r.hit1 ? '✓' : r.hit4 ? '~' : r.ok.length ? '✗' : '·'} [${r.lang}] ${r.top1.d.toFixed(3)} ${r.top1.id}  ← ${r.q}`
+        `${r.hit1 ? '✓' : r.hit4 ? '~' : r.ok.length ? '✗' : '·'} [${r.lang}] ${r.top1.d.toFixed(3)} m=${r.margin.toFixed(3)} ${r.top1.id}  ← ${r.q}`
       )
     }
   }

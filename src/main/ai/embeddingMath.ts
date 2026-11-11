@@ -23,3 +23,9 @@ export function meanPool(hidden: ArrayLike<number>, tokens: number, dim: number)
   }
   return out.map((v) => v / tokens)
 }
+
+// Bitta bo'lak → bir nechta hujjat matni: asosiy (en) sarlavha + har bir tarjima sarlavha, matn bir xil.
+// Qidiruvda bo'lak masofasi = shu variantlarning eng yaqini (scripts/eval-embeddings.mjs --multi bilan bir xil)
+export function documentVariants(title: string, altTitles: string[], text: string): string[] {
+  return [title, ...altTitles].map((t) => `${t}\n${text}`)
+}

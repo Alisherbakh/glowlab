@@ -33,7 +33,8 @@ export function recreateVectorTable(db: Database.Database, dimensions: number): 
   if (dim <= 0 || dim > 4096) throw new Error('Invalid embedding dimension')
   db.exec(`DROP TABLE IF EXISTS ${TABLE}`)
   db.exec(
-    `CREATE VIRTUAL TABLE ${TABLE} USING vec0(chunk_id INTEGER PRIMARY KEY, embedding float[${dim}] distance_metric=cosine)`
+    // chunk_id — metadata ustun (PRIMARY KEY emas): bitta bo'lakka bir nechta vektor (en / uz / ko sarlavha)
+    `CREATE VIRTUAL TABLE ${TABLE} USING vec0(chunk_id INTEGER, embedding float[${dim}] distance_metric=cosine)`
   )
 }
 
@@ -60,16 +61,30 @@ export function insertVectors(
   })()
 }
 
-// Eng yaqin k ta bo'lak. distance = 1 − cosine o'xshashlik (0 = bir xil ma'no)
+const MAX_KNN = 4096 // sqlite-vec KNN chegarasi
+
+// Eng yaqin k ta bo'lak (takrorlanmaydi). distance = 1 − cosine o'xshashlik (0 = bir xil ma'no).
+// Bo'lakning bir nechta vektori bor → hamma vektor olinadi va har bo'lakning eng yaqini qoldiriladi
 export function searchVectors(
   db: Database.Database,
   query: Float32Array,
   k: number
 ): { chunkId: number; distance: number }[] {
+  const n = Math.min(countVectors(db), MAX_KNN)
+  if (n === 0) return []
   const rows = db
     .prepare(
       `SELECT chunk_id, distance FROM ${TABLE} WHERE embedding MATCH ? AND k = ? ORDER BY distance`
     )
-    .all(toBlob(query), Math.trunc(k)) as { chunk_id: number; distance: number }[]
-  return rows.map((r) => ({ chunkId: Number(r.chunk_id), distance: r.distance }))
+    .all(toBlob(query), n) as { chunk_id: number; distance: number }[]
+  const seen = new Set<number>()
+  const out: { chunkId: number; distance: number }[] = []
+  for (const r of rows) {
+    const chunkId = Number(r.chunk_id)
+    if (seen.has(chunkId)) continue // Tartib o'sish bo'yicha → birinchisi eng yaqini
+    seen.add(chunkId)
+    out.push({ chunkId, distance: r.distance })
+    if (out.length >= Math.trunc(k)) break
+  }
+  return out
 }

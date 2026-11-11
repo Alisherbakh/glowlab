@@ -65,7 +65,7 @@ describe('getLabInfo', () => {
       sourcePages: 18,
       topK: 4,
       maxDistance: 0.35,
-      minMargin: 0.023,
+      minMargin: 0.026,
       dimensions: 768,
       embeddingModel: 'intfloat/multilingual-e5-base' // Oflayn lokal model
     })

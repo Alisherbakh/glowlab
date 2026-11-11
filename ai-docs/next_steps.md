@@ -28,6 +28,7 @@
 
 - [ ] Local embeddings check (2026-11-11): `yarn install` → `yarn fetch:models` (279 MB) → `yarn dev` → Ask in uz / ko / en with and without the key; nonsense ("zzzz qqqq") → no matches; terminal `[ask] margin …` lines look sane; AI Lab shows `intfloat/multilingual-e5-base`. Optional: `GEMINI_API_KEY=… node scripts/eval-embeddings.mjs --gemini --verbose` for the Gemini baseline. `yarn build:mac` → the model is inside the .app (`Contents/Resources/app.asar.unpacked/resources/models/embedding/`). Then commit: `feat(rag): on-device multilingual e5 embeddings`.
 - [ ] Gemini 504 fallback check: `yarn dev` → ask a question; if the terminal shows `[gemini] …: status=504 → gemini-3.5-flash-lite bilan qayta urinilmoqda…`, an answer should still arrive. Commit: `fix(gemini): retry 504 with flash-lite and a shorter timeout`.
+- [ ] Multilingual titles check: `yarn dev` → terminal shows `[db] migratsiya qo'llandi: 005_kb_titles` and `[kb] 26 ta bo'lak, 78 ta vektor saqlandi` → ask "자외선 차단제는 얼마나 자주 발라야 하나요?" → first passage "Reapplying sunscreen…"; "zzzz qqqq" → not found.
 
 ## Next
 ✅ All 15 stages coded. After the Mac run: optional serum dataset cleanup + retrain, face metric calibration, notarisation if the app is shared.

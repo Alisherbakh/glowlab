@@ -112,6 +112,34 @@ describe('qidiruv', () => {
     expect(getKbStatus(fake).vectorReady).toBe(true)
     expect(getKbStatus({ model: 'other', dimensions: DIM }).vectorReady).toBe(false) // Model o'zgarsa — qayta hisoblash kerak
   })
+  it("har bo'lakka en + uz + ko sarlavhali vektorlar; natijada bo'lak takrorlanmaydi", async () => {
+    await ensureEmbeddings(fake)
+    expect((getDb().prepare('SELECT COUNT(*) AS n FROM vec_kb').get() as { n: number }).n).toBe(
+      26 * 3
+    )
+    const r = await semanticSearch(fake, 'sunscreen reapply swimming', 64)
+    expect(r.ok).toBe(true)
+    if (!r.ok) return
+    expect(r.hits).toHaveLength(26) // 78 vektor → 26 ta bo'lak
+    expect(new Set(r.hits.map((h) => h.chunk.slug)).size).toBe(26)
+  })
+  it('tarjima sarlavhasiz kb.json ham ishlaydi (faqat asosiy sarlavha)', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'kb-'))
+    const j = JSON.parse(readFileSync(KB_JSON, 'utf8'))
+    j.chunks = j.chunks.slice(0, 3)
+    for (const c of j.chunks) delete c.titles
+    writeFileSync(join(dir, 'kb.json'), JSON.stringify(j))
+    initKb({ kbJsonPath: join(dir, 'kb.json'), vecPath: getLoadablePath() })
+    expect((await ensureEmbeddings(fake)).ok).toBe(true)
+    expect(getKbStatus(fake)).toEqual({ chunks: 3, vectorAvailable: true, vectorReady: true })
+  })
+  it("ko'p qatorli tarjima sarlavha rad etiladi", () => {
+    const dir = mkdtempSync(join(tmpdir(), 'kb-'))
+    const j = JSON.parse(readFileSync(KB_JSON, 'utf8'))
+    j.chunks[0].titles.uz = 'bir\nikki'
+    writeFileSync(join(dir, 'kb.json'), JSON.stringify(j))
+    expect(() => initKb({ kbJsonPath: join(dir, 'kb.json'), vecPath: null })).toThrow()
+  })
   it("semantik qidiruv eng yaqinini topadi, masofa o'sish tartibida", async () => {
     const r = await semanticSearch(fake, 'retinol at night sunscreen during day', 4)
     expect(r.ok).toBe(true)

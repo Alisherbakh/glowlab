@@ -11,7 +11,7 @@ export type KbChunkRow = {
   url: string
 }
 
-export type KbChunkInput = Omit<KbChunkRow, 'id'>
+export type KbChunkInput = Omit<KbChunkRow, 'id'> & { altTitles: string[] } // Tarjima sarlavhalar (uz, ko)
 
 export function getKbMeta(key: string): string | null {
   const row = getDb().prepare('SELECT value FROM kb_meta WHERE key = ?').get(key) as
@@ -35,11 +35,11 @@ export function deleteKbMeta(key: string): void {
 export function replaceKbChunks(chunks: KbChunkInput[]): void {
   const db = getDb()
   const insert = db.prepare(
-    'INSERT INTO kb_chunks (slug, title, text, source, url) VALUES (@slug, @title, @text, @source, @url)'
+    'INSERT INTO kb_chunks (slug, title, text, source, url, alt_titles) VALUES (@slug, @title, @text, @source, @url, @altTitles)'
   )
   db.transaction(() => {
     db.prepare('DELETE FROM kb_chunks').run()
-    for (const c of chunks) insert.run(c)
+    for (const c of chunks) insert.run({ ...c, altTitles: JSON.stringify(c.altTitles) })
     db.prepare("INSERT INTO kb_fts (kb_fts) VALUES ('rebuild')").run() // Indeks kb_chunks'dan qayta yig'iladi
   })()
 }
@@ -48,10 +48,32 @@ export function countKbChunks(): number {
   return (getDb().prepare('SELECT COUNT(*) AS n FROM kb_chunks').get() as { n: number }).n
 }
 
-export function findAllKbChunks(): KbChunkRow[] {
-  return getDb()
-    .prepare('SELECT id, slug, title, text, source, url FROM kb_chunks ORDER BY id')
-    .all() as KbChunkRow[]
+// Embedding uchun: bo'lak id, sarlavhalar va matn (alt_titles — JSON massiv, kb.service yozadi)
+export function findKbChunksForEmbedding(): {
+  id: number
+  title: string
+  altTitles: string[]
+  text: string
+}[] {
+  const rows = getDb()
+    .prepare('SELECT id, title, alt_titles, text FROM kb_chunks ORDER BY id')
+    .all() as { id: number; title: string; alt_titles: string; text: string }[]
+  return rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    altTitles: parseTitles(r.alt_titles),
+    text: r.text
+  }))
+}
+
+// Buzilgan JSON bo'lsa — tarjimasiz davom etamiz (faqat asosiy sarlavha)
+function parseTitles(raw: string): string[] {
+  try {
+    const v: unknown = JSON.parse(raw)
+    return Array.isArray(v) ? v.filter((t): t is string => typeof t === 'string' && t !== '') : []
+  } catch {
+    return []
+  }
 }
 
 export function findKbChunkById(id: number): KbChunkRow | undefined {

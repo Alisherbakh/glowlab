@@ -3,7 +3,7 @@ import { selectRelevant } from './relevance'
 
 const hits = (ds: number[]): { chunk: string; distance: number }[] =>
   ds.map((d, i) => ({ chunk: `c${i}`, distance: d }))
-const opts = { topK: 4, maxDistance: 0.35, minMargin: 0.023 }
+const opts = { topK: 4, maxDistance: 0.35, minMargin: 0.026 }
 
 describe('selectRelevant', () => {
   it('aniq mos savol: eng yaqin parcha ajralib turadi → topK parcha', () => {

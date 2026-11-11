@@ -4,6 +4,7 @@ import { z } from 'zod'
 import type { AnalyzeErrorCode } from '../../shared/analysis'
 import type { KbStatus } from '../../shared/ask'
 import { getDb } from '../db/connection'
+import { documentVariants } from '../ai/embeddingMath'
 import { buildFtsQuery } from '../ai/ftsQuery'
 import { normalize } from '../ai/vectorMath'
 import {
@@ -17,8 +18,8 @@ import {
 import {
   countKbChunks,
   deleteKbMeta,
-  findAllKbChunks,
   findKbChunkById,
+  findKbChunksForEmbedding,
   getKbMeta,
   replaceKbChunks,
   searchKbFts,
@@ -28,7 +29,7 @@ import {
 
 // Bilim bazasi: kb.json → SQLite (matn + FTS5) → vektorlar (sqlite-vec)
 
-// Embedding funksiyasi tashqaridan beriladi (Gemini yoki testda soxta embedder)
+// Embedding funksiyasi tashqaridan beriladi (lokal model yoki testda soxta embedder)
 export type Embedder = {
   model: string
   dimensions: number
@@ -38,6 +39,12 @@ export type Embedder = {
   ) => Promise<{ ok: true; vectors: number[][] } | { ok: false; code: AnalyzeErrorCode }>
 }
 
+const kbTitle = z
+  .string()
+  .min(1)
+  .max(200)
+  .regex(/^[^\n]+$/) // Bir qatorli sarlavha
+
 const kbFileSchema = z.object({
   version: z.number().int(),
   chunks: z
@@ -45,6 +52,8 @@ const kbFileSchema = z.object({
       z.object({
         id: z.string().regex(/^[a-z0-9-]+$/),
         title: z.string().min(1).max(200),
+        // Tarjima sarlavhalar: har biri alohida vektor → o'zbekcha / koreyscha savollar yaxshiroq topiladi
+        titles: z.object({ uz: kbTitle.optional(), ko: kbTitle.optional() }).strict().optional(),
         text: z.string().min(1).max(3000),
         sourceTitle: z.string().min(1).max(200),
         url: z.url({ protocol: /^https$/ }) // Faqat https manbalar
@@ -71,7 +80,8 @@ export function initKb(options: { kbJsonPath: string; vecPath: string | null }):
       title: c.title,
       text: c.text,
       source: c.sourceTitle,
-      url: c.url
+      url: c.url,
+      altTitles: [c.titles?.uz, c.titles?.ko].filter((t): t is string => t !== undefined)
     }))
   )
   // Bo'laklar yangilandi → eski vektorlar endi to'g'ri emas
@@ -85,12 +95,26 @@ export function isVectorAvailable(): boolean {
   return vectorAvailable
 }
 
+// Hujjat matni formati: o'zgarsa (masalan, sarlavha variantlari) eski vektorlar qayta hisoblanadi
+const DOC_FORMAT = 'title-variants-v1'
+
+function embedKey(embedder: Pick<Embedder, 'model' | 'dimensions'>): string {
+  return `${embedder.model}:${embedder.dimensions}:${DOC_FORMAT}`
+}
+
+// Har bo'lak uchun hujjat matnlari (en + tarjima sarlavhalar)
+function kbDocuments(): { chunkId: number; text: string }[] {
+  return findKbChunksForEmbedding().flatMap((c) =>
+    documentVariants(c.title, c.altTitles, c.text).map((text) => ({ chunkId: c.id, text }))
+  )
+}
+
 function vectorsReady(embedder: Pick<Embedder, 'model' | 'dimensions'>): boolean {
   return (
     vectorAvailable &&
     vectorTableExists(getDb()) &&
-    getKbMeta('embed_model') === `${embedder.model}:${embedder.dimensions}` &&
-    countVectors(getDb()) === countKbChunks()
+    getKbMeta('embed_model') === embedKey(embedder) &&
+    countVectors(getDb()) === kbDocuments().length
   )
 }
 
@@ -109,22 +133,24 @@ export function ensureEmbeddings(
   if (vectorsReady(embedder)) return Promise.resolve({ ok: true })
   if (!embedding) {
     embedding = (async () => {
-      const chunks = findAllKbChunks()
+      const docs = kbDocuments()
       const result = await embedder.embed(
-        chunks.map((c) => `${c.title}\n${c.text}`),
+        docs.map((d) => d.text),
         'RETRIEVAL_DOCUMENT'
       )
       if (!result.ok) return result
+      if (result.vectors.length !== docs.length)
+        return { ok: false as const, code: 'unknown' as const } // Har matnga bitta vektor bo'lishi shart
       const db = getDb()
       db.transaction(() => {
         recreateVectorTable(db, embedder.dimensions)
         insertVectors(
           db,
-          chunks.map((c, i) => ({ chunkId: c.id, vector: normalize(result.vectors[i]) }))
+          docs.map((d, i) => ({ chunkId: d.chunkId, vector: normalize(result.vectors[i]) }))
         )
-        setKbMeta('embed_model', `${embedder.model}:${embedder.dimensions}`)
+        setKbMeta('embed_model', embedKey(embedder))
       })()
-      console.log(`[kb] ${chunks.length} ta bo'lak vektorlari saqlandi`)
+      console.log(`[kb] ${countKbChunks()} ta bo'lak, ${docs.length} ta vektor saqlandi`)
       return { ok: true as const }
     })().finally(() => {
       embedding = null

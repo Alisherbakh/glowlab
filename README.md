@@ -67,9 +67,9 @@ MediaPipe finds the face → a quality gate rejects no face / several faces / sm
 
 ### RAG assistant
 
-26 curated English passages from 18 AAD, FDA and Skin Cancer Foundation pages (`resources/kb/kb.json`) are embedded **on the computer** with `intfloat/multilingual-e5-base` (ONNX int8, 768 dims, mean pooling + L2 normalisation, run with the same `onnxruntime-node` as the classifier; tokenizer: `@huggingface/tokenizers`) into a `vec0` table. Questions in Uzbek, Korean or English are embedded the same way, so search works offline and without an API key; the question is not sent anywhere for retrieval.
+26 curated English passages from 18 AAD, FDA and Skin Cancer Foundation pages (`resources/kb/kb.json`) are embedded **on the computer** with `intfloat/multilingual-e5-base` (ONNX int8, 768 dims, mean pooling + L2 normalisation, run with the same `onnxruntime-node` as the classifier; tokenizer: `@huggingface/tokenizers`) into a `vec0` table. Each passage is stored three times — with its English title and with hand-written Uzbek and Korean titles (`titles` in `kb.json`) — and a passage's distance is its closest version. Questions in Uzbek, Korean or English are embedded the same way, so search works offline and without an API key; the question is not sent anywhere for retrieval.
 
-Because e5 distances are tightly packed (even nonsense like "zzzz" lands ~0.25 from every passage), a question counts as covered only if its closest passage is clearly closer than the median passage (margin ≥ 0.023, `src/main/ai/relevance.ts`); passages farther than 0.35 are never used. With a key, Gemini must answer only from the top 4 passages with [n] citations, and answers without a valid citation are rejected as "not in the knowledge base". Without a key, the closest passages are shown instead. Only the question text is sent to Google, after consent, and only to write the answer.
+Because e5 distances are tightly packed (even nonsense like "zzzz" lands ~0.25 from every passage), a question counts as covered only if its closest passage is clearly closer than the median passage (margin ≥ 0.026, `src/main/ai/relevance.ts`); passages farther than 0.35 are never used. With a key, Gemini must answer only from the top 4 passages with [n] citations, and answers without a valid citation are rejected as "not in the knowledge base". Without a key, the closest passages are shown instead. Only the question text is sent to Google, after consent, and only to write the answer.
 
 Model choice was measured with `scripts/eval-embeddings.mjs` (24 questions in en/uz/ko + 6 unrelated):
 
@@ -79,7 +79,17 @@ Model choice was measured with `scripts/eval-embeddings.mjs` (24 questions in en
 | **multilingual-e5-base**           | 279 MB | **17/24** | **21/24** | 4/6 (8/10 with nonsense queries)   |
 | paraphrase-multilingual-MiniLM-L12 | 118 MB | 15/24     | 16/24     | —                                  |
 
-English questions: 8/8 top-1 for all models; Uzbek and Korean are harder (e5-base top-4: 7/8 and 6/8). The model file is too large for GitHub, so `yarn fetch:models` downloads it (pinned revision, SHA-256 checked).
+English questions: 8/8 top-1 for all models; Uzbek and Korean are harder (e5-base top-4: 7/8 and 6/8).
+
+Adding the Uzbek/Korean titles was checked on a second, **held-out** set of 28 questions + 6 unrelated, written before the titles (the titles are plain translations of the English ones, not tuned to the questions):
+
+| e5-base, held-out set                  | Top-1     | Top-4     |
+| -------------------------------------- | --------- | --------- |
+| English titles only                    | 21/28     | 24/28     |
+| + uz/ko titles in the same text        | 19/28     | 27/28     |
+| **+ uz/ko titles as separate vectors** | **24/28** | **28/28** |
+
+Over both sets (52 related + 12 unrelated) the separate-vector version with margin 0.026 lets 51/52 related questions through and rejects 6/12 unrelated ones (before: 48/52 and 4/12). The margin was chosen on these same 64 questions, so real-world numbers may be a little lower. The model file is too large for GitHub, so `yarn fetch:models` downloads it (pinned revision, SHA-256 checked).
 
 ## Privacy
 

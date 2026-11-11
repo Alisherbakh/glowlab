@@ -32,7 +32,10 @@ describe.skipIf(!hasModel)('lokal embedding (haqiqiy multilingual-e5-base)', () 
   it.each([
     ['How often should I reapply sunscreen at the beach?', 'sunscreen-reapply'],
     ['Yuzimni kuniga necha marta yuvishim kerak?', 'face-washing-frequency'],
-    ['주사(로사세아) 피부에는 어떤 제품을 써야 하나요?', 'rosacea-skin-care']
+    ['주사(로사세아) 피부에는 어떤 제품을 써야 하나요?', 'rosacea-skin-care'],
+    // Mac'dagi haqiqiy savol (2026-11-11): sarlavhalarsiz patch-test birinchi chiqqan edi
+    ['자외선 차단제는 얼마나 자주 발라야 하나요?', 'sunscreen-reapply'],
+    ['Retinolni qanday boshlash kerak?', 'retinoid-how']
   ])('%s → %s (en / uz / ko)', async (question, slug) => {
     const r = await semanticSearch(localEmbedder, question, 4)
     expect(r.ok).toBe(true)

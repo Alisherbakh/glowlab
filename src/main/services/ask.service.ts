@@ -15,14 +15,14 @@ import { getSettings } from './settings.service'
 import { isVectorAvailable, keywordSearch, semanticSearch, type Embedder } from './kb.service'
 
 export const TOP_K = 4 // Modelga beriladigan parchalar soni
-// multilingual-e5-base o'lchovi (scripts/eval-embeddings.mjs, 30 savol en/uz/ko + ma'nosiz so'zlar):
-// mos parchalar 0.095–0.312, aloqasiz savollar 0.244–0.333 → faqat masofa bilan ajratib bo'lmaydi.
-// Asosiy filtr — nisbiy farq (MIN_MARGIN, ai/relevance.ts): 30 savolda mos 22/24 o'tadi, aloqasiz 4/6 rad etiladi;
-// 8 ta qisqa so'z ("sunscreen") va ma'nosiz so'rov ("zzzz") qo'shilganda 28/30 va 8/10.
+// multilingual-e5-base o'lchovi (scripts/eval-embeddings.mjs --set all --multi, 52 mos + 12 aloqasiz savol en/uz/ko):
+// har bo'lakda en / uz / ko sarlavhali 3 ta vektor, bo'lak masofasi = eng yaqini.
+// Faqat masofa bilan ajratib bo'lmaydi (mos 0.095–0.259, aloqasiz 0.230–0.302) → asosiy filtr — nisbiy farq
+// (MIN_MARGIN, ai/relevance.ts): mos 51/52 o'tadi, aloqasiz 6/12 rad etiladi (sarlavhalarsiz, 0.023 bilan: 48/52 va 4/12).
 // Ikkinchi himoya: Gemini "answerable: false" tekshiruvi. MAX_DISTANCE — faqat yuqori chegara
 export const MAX_DISTANCE = 0.35
-export const MIN_MARGIN = 0.023
-const SCAN_K = 64 // Mediana uchun ko'p parcha olinadi (bilim bazasi 26 ta → hammasi)
+export const MIN_MARGIN = 0.026
+const SCAN_K = 64 // Mediana uchun ko'p bo'lak olinadi (bilim bazasi 26 ta → hammasi)
 const SNIPPET_LENGTH = 220
 
 // Oflayn embedding (Node ichida): savol Google'ga embedding uchun yuborilmaydi, kalitsiz ham ishlaydi

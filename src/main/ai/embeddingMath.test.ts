@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { e5Input, meanPool, truncateIds } from './embeddingMath'
+import { documentVariants, e5Input, meanPool, truncateIds } from './embeddingMath'
 
 describe('e5Input', () => {
   it('savol va parcha uchun to‘g‘ri prefiks', () => {
@@ -27,5 +27,18 @@ describe('meanPool', () => {
   it('noto‘g‘ri o‘lcham → xato', () => {
     expect(() => meanPool([1, 2, 3], 2, 3)).toThrow()
     expect(() => meanPool([], 0, 3)).toThrow()
+  })
+})
+
+describe('documentVariants', () => {
+  it('har bir sarlavha uchun alohida matn, asosiy sarlavha birinchi', () => {
+    expect(documentVariants('Wash', ['Yuvish', '세안'], 'Twice a day.')).toEqual([
+      'Wash\nTwice a day.',
+      'Yuvish\nTwice a day.',
+      '세안\nTwice a day.'
+    ])
+  })
+  it("tarjima yo'q → faqat asosiy", () => {
+    expect(documentVariants('Wash', [], 'Twice a day.')).toEqual(['Wash\nTwice a day.'])
   })
 })
