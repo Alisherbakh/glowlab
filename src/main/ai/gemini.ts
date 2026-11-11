@@ -1,6 +1,7 @@
 import { ApiError, GoogleGenAI, ThinkingLevel } from '@google/genai'
 import type { AnalyzeErrorCode } from '../../shared/analysis'
 import { getApiKey, getModelName } from './keyStore'
+import { withRetry } from './retry'
 
 // Gemini'ga rasm + prompt yuboradi va JSON matnni qaytaradi (tekshirish service'da)
 export async function generateJsonFromImage(
@@ -11,11 +12,11 @@ export async function generateJsonFromImage(
   const apiKey = getApiKey()
   if (!apiKey) return { ok: false, code: 'no_key' }
 
-  const ai = new GoogleGenAI({ apiKey: apiKey.key, httpOptions: { timeout: 60_000 } }) // 60 soniya kutamiz
+  const ai = new GoogleGenAI({ apiKey: apiKey.key }) // Kutish muddati har urinishda alohida (ai/retry.ts)
 
   try {
     const response = await withRetry(
-      (model) =>
+      (model, timeout) =>
         ai.models.generateContent({
           model,
           contents: [
@@ -28,6 +29,7 @@ export async function generateJsonFromImage(
             }
           ],
           config: {
+            httpOptions: { timeout }, // Shu urinish uchun kutish muddati (ms)
             responseMimeType: 'application/json', // Faqat JSON javob
             responseJsonSchema: schema, // Javob tuzilmasi
             // Gemini 3: temperature standart (1.0) qoldiriladi — Google 1.0 dan pastini tavsiya qilmaydi (takrorlanib qolishi mumkin)
@@ -51,14 +53,15 @@ export async function generateJsonFromText(
   const apiKey = getApiKey()
   if (!apiKey) return { ok: false, code: 'no_key' }
 
-  const ai = new GoogleGenAI({ apiKey: apiKey.key, httpOptions: { timeout: 60_000 } })
+  const ai = new GoogleGenAI({ apiKey: apiKey.key })
   try {
     const response = await withRetry(
-      (model) =>
+      (model, timeout) =>
         ai.models.generateContent({
           model,
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           config: {
+            httpOptions: { timeout }, // Shu urinish uchun kutish muddati (ms)
             responseMimeType: 'application/json',
             responseJsonSchema: schema,
             thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } // Oddiy, parchalarga asoslangan javob — chuqur fikrlash shart emas
@@ -75,24 +78,6 @@ export async function generateJsonFromText(
 
 // Band model uchun zaxira: Google ro'yxatida "Stable", yangi loyihalar uchun tavsiya qilingan yengil model
 const FALLBACK_MODEL = 'gemini-3.5-flash-lite'
-
-// Server vaqtincha band (500/503) bo'lsa — 1 soniyadan keyin keyingi model bilan bir marta qayta urinadi.
-// 504 (muddat tugadi) qayta urinilmaydi: yana 60 s kutish kerak bo'lardi.
-async function withRetry<T>(call: (model: string) => Promise<T>, models: string[]): Promise<T> {
-  const list = [...new Set(models)]
-  const first = list[0]
-  const second = list[1] ?? first // Zaxira bo'lmasa — o'sha model qayta
-  try {
-    return await call(first)
-  } catch (err) {
-    if (err instanceof ApiError && (err.status === 500 || err.status === 503)) {
-      console.warn(`[gemini] ${first}: status=${err.status} → ${second} bilan qayta urinilmoqda…`)
-      await new Promise((r) => setTimeout(r, 1000))
-      return call(second)
-    }
-    throw err
-  }
-}
 
 // Javob yozish uchun modellar: tanlangan + zaxira
 function textModels(): string[] {
