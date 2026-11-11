@@ -347,7 +347,7 @@ export const ko: Record<TranslationKey, string> = {
   'ask.mode.online': 'AI 답변 사용 중 (Gemini)',
   'ask.mode.offline': '오프라인 검색',
   'ask.offlineInfo':
-    'Gemini API 키가 없어 GlowLab이 지식 베이스를 오프라인으로 검색하고, 작성된 답변 대신 관련 문단을 보여줍니다. 오프라인 검색은 "sunscreen", "retinol" 같은 영어 키워드에서 가장 잘 작동합니다. 설정에서 키를 추가할 수 있습니다.',
+    'Gemini API 키가 없어 GlowLab이 이 컴퓨터에서 지식 베이스를 검색하고, 작성된 답변 대신 가장 가까운 문단을 보여줍니다. 한국어, 영어, 우즈베크어 질문을 이해하지만 문단이 질문과 정확히 맞지 않을 수 있습니다. 설정에서 키를 추가할 수 있습니다.',
   'ask.suggestions': '예시 질문',
   'ask.suggest.1': '레티놀은 어떻게 시작해야 하나요?',
   'ask.suggest.2': '자외선 차단제는 얼마나 자주 덧발라야 하나요?',
@@ -366,9 +366,9 @@ export const ko: Record<TranslationKey, string> = {
   'ask.error.kbEmpty': '지식 베이스를 불러오지 못했습니다. 앱을 다시 시작해 보세요.',
   'ask.notFound':
     'GlowLab 지식 베이스에 이 질문에 대한 내용이 없어 답변을 만들지 않았습니다. 다르게 질문하거나 피부과 전문의에게 문의하세요.',
-  'ask.offlineResults': '오프라인 검색 결과 (AI 답변 없음):',
-  'ask.noMatches':
-    '일치하는 문단이 없습니다. "sunscreen", "dry skin" 같은 영어 키워드를 사용해 보세요.',
+  'ask.offlineResults':
+    '이 컴퓨터에서 찾은 가장 가까운 문단 (AI 답변 없음, 정확히 맞지 않을 수 있음):',
+  'ask.noMatches': '가까운 문단을 찾지 못했습니다. 질문을 다르게 바꿔 보세요.',
   'ask.matches': '관련 문단',
   'ask.sources': '출처',
   'ask.search.semantic': '의미 검색',
@@ -443,16 +443,17 @@ export const ko: Record<TranslationKey, string> = {
   'lab.rag.title': 'GlowLab에 질문 (RAG: 임베딩 + 벡터 검색)',
   'lab.rag.chunks': '{pages}개 페이지의 {chunks}개 문단',
   'lab.rag.ready': '벡터 준비됨',
-  'lab.rag.notYet': '첫 질문 때 벡터를 계산합니다',
+  'lab.rag.notYet': '앱을 열 때 이 컴퓨터에서 벡터를 계산합니다',
   'lab.rag.noVec': '벡터 확장 미로드 · 키워드 검색',
   'lab.rag.s1': 'AAD, FDA, Skin Cancer Foundation 자료에서 정리한 문단을 SQLite에 저장합니다.',
   'lab.rag.s2':
-    '문단과 질문을 정규화된 임베딩 벡터로 바꾸고, sqlite-vec이 코사인 거리로 가장 가까운 {k}개 문단을 찾습니다.',
+    '문단과 질문을 이 컴퓨터에서 정규화된 임베딩 벡터로 바꾸고(multilingual-e5-base, ONNX), sqlite-vec이 코사인 거리로 가장 가까운 {k}개 문단을 찾습니다.',
   'lab.rag.s3':
-    '거리 {d}보다 먼 문단은 제외하고, 가까운 문단이 없으면 지식 베이스에 답이 없다고 알려줍니다.',
+    '가장 가까운 문단이 다른 문단보다 확실히 가깝지 않으면(차이 {m}) 지식 베이스에 답이 없다고 알려주며, 거리 {d}보다 먼 문단은 사용하지 않습니다.',
   'lab.rag.s4':
-    'Gemini는 그 문단만으로 [n] 출처와 함께 답을 쓰며, 유효한 출처가 없는 답은 거절됩니다. 오프라인에서는 SQLite FTS5 키워드 검색으로 관련 문단을 보여줍니다.',
-  'lab.rag.note': '동의 후 질문 텍스트만 Google로 전송됩니다.',
+    'Gemini는 그 문단만으로 [n] 출처와 함께 답을 쓰며, 유효한 출처가 없는 답은 거절됩니다. 키가 없으면 가장 가까운 문단을 대신 보여줍니다.',
+  'lab.rag.note':
+    '검색은 이 컴퓨터에서 실행됩니다. 답변 작성을 위해 동의 후 질문 텍스트만 Google로 전송됩니다.',
   'lab.compat.title': '루틴 궁합 체크',
   'lab.compat.rules': '규칙 {count}개',
   'lab.compat.offline': '규칙 기반 · 오프라인',

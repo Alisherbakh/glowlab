@@ -356,7 +356,7 @@ export const uz: Record<TranslationKey, string> = {
   'ask.mode.online': 'AI javoblar yoqilgan (Gemini)',
   'ask.mode.offline': 'Oflayn qidiruv',
   'ask.offlineInfo':
-    "Gemini API kaliti yo'q, shuning uchun GlowLab bilimlar bazasidan oflayn qidiradi va yozma javob o'rniga mos parchalarni ko'rsatadi. Oflayn qidiruv inglizcha kalit so'zlar bilan yaxshi ishlaydi, masalan \"sunscreen\" yoki \"retinol\". Kalitni Sozlamalarda qo'shish mumkin.",
+    "Gemini API kaliti yo'q, shuning uchun GlowLab bilimlar bazasini shu kompyuterning o'zida qidiradi va yozma javob o'rniga eng yaqin parchalarni ko'rsatadi. Qidiruv o'zbek, ingliz va koreys tilidagi savollarni tushunadi, lekin parcha savolingizga to'liq mos kelmasligi mumkin. Kalitni Sozlamalarda qo'shish mumkin.",
   'ask.suggestions': 'Namuna savollar',
   'ask.suggest.1': 'Retinolni qanday boshlash kerak?',
   'ask.suggest.2': 'Quyoshdan himoya kremini qancha vaqtda qayta surtish kerak?',
@@ -375,9 +375,9 @@ export const uz: Record<TranslationKey, string> = {
   'ask.error.kbEmpty': "Bilimlar bazasini yuklab bo'lmadi. Ilovani qayta ishga tushirib ko'ring.",
   'ask.notFound':
     "GlowLab bilimlar bazasida bu savolga javob yo'q, shuning uchun javob to'qib chiqarilmadi. Savolni boshqacha bering yoki dermatologdan so'rang.",
-  'ask.offlineResults': 'Oflayn qidiruv natijalari (AI javobisiz):',
-  'ask.noMatches':
-    'Mos parcha topilmadi. "sunscreen" yoki "dry skin" kabi inglizcha kalit so\'zlarni sinab ko\'ring.',
+  'ask.offlineResults':
+    "Shu kompyuterda topilgan eng yaqin parchalar (AI javobisiz; to'liq mos kelmasligi mumkin):",
+  'ask.noMatches': "Yaqin parcha topilmadi. Savolni boshqacha so'rab ko'ring.",
   'ask.matches': 'Mos parchalar',
   'ask.sources': 'Manbalar',
   'ask.search.semantic': 'Semantik qidiruv',
@@ -454,17 +454,18 @@ export const uz: Record<TranslationKey, string> = {
   'lab.rag.title': "GlowLab'dan so'rang (RAG: embedding + vektor qidiruv)",
   'lab.rag.chunks': '{pages} ta sahifadan {chunks} ta parcha',
   'lab.rag.ready': 'Vektorlar tayyor',
-  'lab.rag.notYet': 'Vektorlar birinchi savolda hisoblanadi',
+  'lab.rag.notYet': 'Vektorlar ilova ochilganda shu kompyuterda hisoblanadi',
   'lab.rag.noVec': "Vektor kengaytmasi yuklanmagan · kalit so'z qidiruvi",
   'lab.rag.s1':
     "AAD, FDA va Skin Cancer Foundation sahifalaridan tanlangan parchalar SQLite'da saqlanadi.",
   'lab.rag.s2':
-    "Parchalar va savolingiz normallashtirilgan embedding vektorlarga aylantiriladi; sqlite-vec cosine masofa bo'yicha eng yaqin {k} ta parchani topadi.",
+    "Parchalar va savolingiz shu kompyuterning o'zida normallashtirilgan embedding vektorlarga aylantiriladi (multilingual-e5-base, ONNX); sqlite-vec cosine masofa bo'yicha eng yaqin {k} ta parchani topadi.",
   'lab.rag.s3':
-    "{d} dan uzoq parchalar tashlab yuboriladi; birortasi ham yaqin bo'lmasa, GlowLab javob bazada yo'qligini aytadi.",
+    "Eng yaqin parcha qolganlaridan aniq yaqinroq bo'lmasa (farq {m}), GlowLab javob bazada yo'qligini aytadi; {d} dan uzoq parchalar hech qachon ishlatilmaydi.",
   'lab.rag.s4':
-    "Gemini javobni faqat shu parchalardan [n] havolalar bilan yozadi; haqiqiy havolasi yo'q javob rad etiladi. Oflayn rejimda SQLite FTS5 kalit so'z qidiruvi mos parchalarni ko'rsatadi.",
-  'lab.rag.note': "Google'ga faqat savol matni, sizning roziligingizdan keyin yuboriladi.",
+    "Gemini javobni faqat shu parchalardan [n] havolalar bilan yozadi; haqiqiy havolasi yo'q javob rad etiladi. Kalit bo'lmasa, eng yaqin parchalarning o'zi ko'rsatiladi.",
+  'lab.rag.note':
+    "Qidiruv shu kompyuterda ishlaydi. Javob yozish uchun Google'ga faqat savol matni, sizning roziligingizdan keyin yuboriladi.",
   'lab.compat.title': 'Tartib moslik tekshiruvi',
   'lab.compat.rules': '{count} ta qoida',
   'lab.compat.offline': 'Qoidaga asoslangan · oflayn',

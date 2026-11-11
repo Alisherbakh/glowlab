@@ -113,7 +113,7 @@ test("tartib + moslik tekshiruvi: retinoid ertalab → ogohlantirish, kechqurun 
   await expect(page.getByText('Tarkibi skan qilinmagan', { exact: true })).toBeVisible() // Label scan qilinmagan → ma'lumot
 })
 
-test("so'rang: kalitsiz → oflayn qidiruv natijalari", async () => {
+test("so'rang: kalitsiz → oflayn semantik qidiruv natijalari", async () => {
   await go("GlowLab'dan so'rang")
   await expect(page.getByText('Oflayn qidiruv', { exact: true })).toBeVisible()
   const input = page.getByLabel('Savolingiz')
@@ -123,7 +123,7 @@ test("so'rang: kalitsiz → oflayn qidiruv natijalari", async () => {
   await expect(page.getByText('Choosing and applying sunscreen')).toBeVisible()
   await input.fill('zzzz qqqq')
   await input.press('Enter')
-  await expect(page.getByText('Mos parcha topilmadi', { exact: false })).toBeVisible()
+  await expect(page.getByText('Yaqin parcha topilmadi', { exact: false })).toBeVisible()
 })
 
 test("AI Lab: haqiqiy model ko'rsatkichlari", async () => {

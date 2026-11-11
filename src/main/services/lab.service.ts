@@ -4,10 +4,9 @@ import { z } from 'zod'
 import type { ClassifierMetrics, GradCamImage, LabInfo } from '../../shared/aiLab'
 import { MIN_CONFIDENCE } from '../../shared/classifier'
 import { COMPAT_RULES } from '../../shared/compatibility'
-import { EMBEDDING_DIMENSIONS, EMBEDDING_MODEL } from '../ai/gemini'
 import { getModelDir } from '../ai/modelDir'
 import { countKbSources } from '../models/kb.model'
-import { MAX_DISTANCE, TOP_K, geminiEmbedder } from './ask.service'
+import { MAX_DISTANCE, MIN_MARGIN, TOP_K, localEmbedder } from './ask.service'
 import { getKbStatus } from './kb.service'
 
 // metrics.json (03_evaluate.ipynb yozadi) — ishonmaymiz, tekshiramiz
@@ -59,7 +58,7 @@ export function readGradCam(dir: string): GradCamImage[] {
 
 export function getLabInfo(): LabInfo {
   const dir = getModelDir()
-  const kb = getKbStatus(geminiEmbedder)
+  const kb = getKbStatus(localEmbedder)
   return {
     classifier: readClassifierMetrics(dir),
     gradcam: readGradCam(dir),
@@ -68,9 +67,10 @@ export function getLabInfo(): LabInfo {
       sourcePages: countKbSources(),
       vectorAvailable: kb.vectorAvailable,
       vectorReady: kb.vectorReady,
-      embeddingModel: EMBEDDING_MODEL,
-      dimensions: EMBEDDING_DIMENSIONS,
+      embeddingModel: localEmbedder.model,
+      dimensions: localEmbedder.dimensions,
       maxDistance: MAX_DISTANCE,
+      minMargin: MIN_MARGIN,
       topK: TOP_K
     },
     compatRules: COMPAT_RULES.length

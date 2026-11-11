@@ -348,7 +348,7 @@ export const en = {
   'ask.mode.online': 'AI answers on (Gemini)',
   'ask.mode.offline': 'Offline search',
   'ask.offlineInfo':
-    'No Gemini API key, so GlowLab searches the knowledge base offline and shows matching passages instead of a written answer. Offline search works best with English keywords, e.g. "sunscreen" or "retinol". You can add a key in Settings.',
+    'No Gemini API key, so GlowLab searches the knowledge base on this computer and shows the closest passages instead of a written answer. The search understands English, Uzbek and Korean questions, but a passage may not match your question exactly. You can add a key in Settings.',
   'ask.suggestions': 'Example questions',
   'ask.suggest.1': 'How should I start using retinol?',
   'ask.suggest.2': 'How often should I reapply sunscreen?',
@@ -367,8 +367,9 @@ export const en = {
   'ask.error.kbEmpty': "The knowledge base couldn't be loaded. Restart the app and try again.",
   'ask.notFound':
     "GlowLab's knowledge base doesn't cover this question, so no answer was made up. Try asking differently, or ask a dermatologist.",
-  'ask.offlineResults': 'Offline search results (no AI answer):',
-  'ask.noMatches': 'No matching passages. Try English keywords such as "sunscreen" or "dry skin".',
+  'ask.offlineResults':
+    'Closest passages found on this computer (no AI answer; they may not match exactly):',
+  'ask.noMatches': 'No close passages found. Try rephrasing your question.',
   'ask.matches': 'Matching passages',
   'ask.sources': 'Sources',
   'ask.search.semantic': 'Semantic search',
@@ -443,17 +444,18 @@ export const en = {
   'lab.rag.title': 'Ask GlowLab (RAG: embeddings + vector search)',
   'lab.rag.chunks': '{chunks} passages from {pages} pages',
   'lab.rag.ready': 'Vectors ready',
-  'lab.rag.notYet': 'Vectors are computed on the first question',
+  'lab.rag.notYet': 'Vectors are computed on this computer at startup',
   'lab.rag.noVec': 'Vector extension not loaded · keyword search',
   'lab.rag.s1':
     'Curated passages from AAD, FDA and Skin Cancer Foundation pages are stored in SQLite.',
   'lab.rag.s2':
-    'Passages and your question are turned into normalized embedding vectors; sqlite-vec finds the {k} closest passages by cosine distance.',
+    'Passages and your question are turned into normalized embedding vectors on this computer (multilingual-e5-base, ONNX); sqlite-vec finds the {k} closest passages by cosine distance.',
   'lab.rag.s3':
-    "Passages farther than distance {d} are dropped; if none is close, GlowLab says the answer isn't in its knowledge base.",
+    "If the closest passage is not clearly closer than the rest (margin {m}), GlowLab says the answer isn't in its knowledge base; passages farther than distance {d} are never used.",
   'lab.rag.s4':
-    'Gemini writes the answer only from those passages with [n] citations; answers without a valid citation are rejected. Offline, SQLite FTS5 keyword search shows matching passages.',
-  'lab.rag.note': 'Only the question text is sent to Google, after your consent.',
+    'Gemini writes the answer only from those passages with [n] citations; answers without a valid citation are rejected. Without a key, the closest passages are shown instead.',
+  'lab.rag.note':
+    'Search runs on this computer. Only the question text is sent to Google to write the answer, after your consent.',
   'lab.compat.title': 'Routine compatibility check',
   'lab.compat.rules': '{count} rules',
   'lab.compat.offline': 'Rule-based · offline',

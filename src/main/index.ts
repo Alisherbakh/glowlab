@@ -10,7 +10,8 @@ import { startExpiryReminders, stopExpiryReminders } from './jobs/expiryReminder
 import { stopFaceWorker } from './ai/faceAnalyzer'
 import { getKbDir } from './ai/modelDir'
 import { unpackedPath } from './ai/vectorStore'
-import { initKb } from './services/kb.service'
+import { localEmbedder } from './services/ask.service'
+import { ensureEmbeddings, initKb, isVectorAvailable } from './services/kb.service'
 
 // sqlite-vec kengaytmasi yo'li (build'da asar'dan chiqarilgan nusxa). Topilmasa → null (oflayn FTS5 ishlaydi)
 function vecExtensionPath(): string | null {
@@ -120,6 +121,8 @@ app.whenReady().then(() => {
 
   createWindow()
   startExpiryReminders() // Muddat eslatmalari (5 s keyin, so'ng har 6 soatda)
+  // RAG vektorlarini fonda tayyorlaymiz (lokal model, ~1 s) → birinchi savol kutmaydi
+  if (isVectorAvailable()) void ensureEmbeddings(localEmbedder)
 
   // macOS: dock ikonkasi bosilganda oyna yo'q bo'lsa, yangisini ochamiz
   app.on('activate', function () {

@@ -1,28 +1,35 @@
 import { z } from 'zod'
 import { MAX_QUESTION_LENGTH, type AskResult, type AskSource } from '../../shared/ask'
 import { ASK_RESPONSE_SCHEMA, buildAskPrompt } from '../ai/askPrompt'
-import {
-  EMBEDDING_DIMENSIONS,
-  EMBEDDING_MODEL,
-  embedTexts,
-  generateJsonFromText
-} from '../ai/gemini'
+import { generateJsonFromText } from '../ai/gemini'
 import { getApiKey } from '../ai/keyStore'
+import {
+  LOCAL_EMBEDDING_DIMENSIONS,
+  LOCAL_EMBEDDING_MODEL,
+  embedTextsLocal
+} from '../ai/localEmbedder'
+import { selectRelevant } from '../ai/relevance'
 import type { KbChunkRow } from '../models/kb.model'
 import { getProfile } from './profile.service'
 import { getSettings } from './settings.service'
 import { isVectorAvailable, keywordSearch, semanticSearch, type Embedder } from './kb.service'
 
 export const TOP_K = 4 // Modelga beriladigan parchalar soni
-// Cosine masofa chegarasi (0 = bir xil ma'no). Mac'dagi haqiqiy o'lchovlar: mos savollar 0.27–0.35,
-// aloqasiz savol ("Fransiya poytaxti") ≥ 0.53. Undan uzoq parchalar ko'rsatilmaydi va Gemini'ga yuborilmaydi
-export const MAX_DISTANCE = 0.45
+// multilingual-e5-base o'lchovi (scripts/eval-embeddings.mjs, 30 savol en/uz/ko + ma'nosiz so'zlar):
+// mos parchalar 0.095–0.312, aloqasiz savollar 0.244–0.333 → faqat masofa bilan ajratib bo'lmaydi.
+// Asosiy filtr — nisbiy farq (MIN_MARGIN, ai/relevance.ts): 30 savolda mos 22/24 o'tadi, aloqasiz 4/6 rad etiladi;
+// 8 ta qisqa so'z ("sunscreen") va ma'nosiz so'rov ("zzzz") qo'shilganda 28/30 va 8/10.
+// Ikkinchi himoya: Gemini "answerable: false" tekshiruvi. MAX_DISTANCE — faqat yuqori chegara
+export const MAX_DISTANCE = 0.35
+export const MIN_MARGIN = 0.023
+const SCAN_K = 64 // Mediana uchun ko'p parcha olinadi (bilim bazasi 26 ta → hammasi)
 const SNIPPET_LENGTH = 220
 
-export const geminiEmbedder: Embedder = {
-  model: EMBEDDING_MODEL,
-  dimensions: EMBEDDING_DIMENSIONS,
-  embed: embedTexts
+// Oflayn embedding (Node ichida): savol Google'ga embedding uchun yuborilmaydi, kalitsiz ham ishlaydi
+export const localEmbedder: Embedder = {
+  model: LOCAL_EMBEDDING_MODEL,
+  dimensions: LOCAL_EMBEDDING_DIMENSIONS,
+  embed: embedTextsLocal
 }
 
 const questionSchema = z.string().trim().min(2).max(MAX_QUESTION_LENGTH)
@@ -62,54 +69,48 @@ export type AskDeps = {
   generate: typeof generateJsonFromText
   hasKey: () => boolean
   maxDistance: number
+  minMargin: number
 }
 
 const defaultDeps: AskDeps = {
-  embedder: geminiEmbedder,
+  embedder: localEmbedder,
   generate: generateJsonFromText,
   hasKey: () => getApiKey() !== null,
-  maxDistance: MAX_DISTANCE
+  maxDistance: MAX_DISTANCE,
+  minMargin: MIN_MARGIN
 }
 
 export async function askQuestion(input: unknown, deps: AskDeps = defaultDeps): Promise<AskResult> {
-  const { embedder, generate, hasKey, maxDistance } = deps
+  const { embedder, generate, hasKey, maxDistance, minMargin } = deps
   const parsed = questionSchema.safeParse(input)
   if (!parsed.success) return { status: 'error', code: 'bad_question' }
   const question = parsed.data
 
-  // 1) Kalit yo'q → faqat oflayn qidiruv (savol kompyuterdan chiqmaydi)
-  if (!hasKey()) {
-    return {
-      status: 'offline',
-      reason: 'no_key',
-      sources: toSources(keywordSearch(question, TOP_K))
-    }
-  }
-
-  // 2) Qidiruv: semantik (sqlite-vec) yoki kengaytma bo'lmasa kalit so'z (FTS5)
-  let chunks: KbChunkRow[]
-  let mode: 'semantic' | 'keyword'
-  if (isVectorAvailable()) {
-    const sem = await semanticSearch(embedder, question, TOP_K)
-    if (!sem.ok) {
-      return {
-        status: 'offline',
-        reason: sem.code,
-        sources: toSources(keywordSearch(question, TOP_K))
-      }
-    }
+  // 1) Qidiruv: semantik (lokal embedding + sqlite-vec) yoki kengaytma bo'lmasa kalit so'z (FTS5).
+  // Ikkalasi ham kompyuterning o'zida ishlaydi — savol hali hech qayerga yuborilmagan
+  let chunks: KbChunkRow[] = []
+  let mode: 'semantic' | 'keyword' = 'keyword'
+  const sem = isVectorAvailable() ? await semanticSearch(embedder, question, SCAN_K) : null
+  if (sem?.ok) {
+    const picked = selectRelevant(sem.hits, { topK: TOP_K, maxDistance, minMargin })
     if (import.meta.env.DEV) {
       console.log(
-        '[ask] distances',
-        sem.hits.map((h) => `${h.chunk.slug}:${h.distance.toFixed(3)}`).join(' ')
+        `[ask] margin ${picked.margin.toFixed(3)} · distances`,
+        sem.hits
+          .slice(0, TOP_K)
+          .map((h) => `${h.chunk.slug}:${h.distance.toFixed(3)}`)
+          .join(' ')
       )
     }
-    chunks = sem.hits.filter((h) => h.distance <= maxDistance).map((h) => h.chunk)
+    chunks = picked.chunks
     mode = 'semantic'
   } else {
+    // Kengaytma yoki lokal model yo'q (yarn fetch:models) → kalit so'z qidiruvi bilan davom etamiz
     chunks = keywordSearch(question, TOP_K)
-    mode = 'keyword'
   }
+
+  // 2) Kalit yo'q → topilgan parchalarning o'zi ko'rsatiladi (yozma javobsiz, savol kompyuterdan chiqmaydi)
+  if (!hasKey()) return { status: 'offline', reason: 'no_key', sources: toSources(chunks) }
   if (chunks.length === 0) return { status: 'not_found', sources: [], mode }
 
   // 3) Gemini faqat shu parchalar asosida javob yozadi

@@ -64,8 +64,10 @@ describe('getLabInfo', () => {
       chunks: 26,
       sourcePages: 18,
       topK: 4,
-      maxDistance: 0.45,
-      dimensions: 768
+      maxDistance: 0.35,
+      minMargin: 0.023,
+      dimensions: 768,
+      embeddingModel: 'intfloat/multilingual-e5-base' // Oflayn lokal model
     })
     expect(info.compatRules).toBe(6)
     expect(info.classifier).not.toBeNull()

@@ -28,3 +28,6 @@ ml/raw/
 e2e-results/
 playwright-report/
 test-results/
+
+# RAG embedding modeli (279 MB, GitHub 100 MB chegarasidan katta) → yarn fetch:models
+resources/models/embedding/

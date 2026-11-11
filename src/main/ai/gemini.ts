@@ -73,48 +73,6 @@ export async function generateJsonFromText(
   }
 }
 
-export const EMBEDDING_MODEL = 'gemini-embedding-001'
-export const EMBEDDING_DIMENSIONS = 768 // Kichikroq o'lcham: tezroq qidiruv, kamroq joy
-const EMBED_BATCH = 20 // Bitta so'rovdagi matnlar soni (ehtiyotkor chegara)
-
-export type EmbedTask = 'RETRIEVAL_DOCUMENT' | 'RETRIEVAL_QUERY'
-
-// Matnlarni vektorlarga aylantiradi (tartib saqlanadi). Normallashtirish chaqiruvchida
-export async function embedTexts(
-  texts: string[],
-  taskType: EmbedTask
-): Promise<{ ok: true; vectors: number[][] } | { ok: false; code: AnalyzeErrorCode }> {
-  const apiKey = getApiKey()
-  if (!apiKey) return { ok: false, code: 'no_key' }
-
-  const ai = new GoogleGenAI({ apiKey: apiKey.key, httpOptions: { timeout: 30_000 } })
-  const vectors: number[][] = []
-  try {
-    for (let i = 0; i < texts.length; i += EMBED_BATCH) {
-      const batch = texts.slice(i, i + EMBED_BATCH)
-      const response = await withRetry(
-        (model) =>
-          ai.models.embedContent({
-            model,
-            contents: batch,
-            config: { taskType, outputDimensionality: EMBEDDING_DIMENSIONS }
-          }),
-        [EMBEDDING_MODEL] // Vektorlar bitta modeldan bo'lishi shart → zaxira yo'q
-      )
-      const got = response.embeddings ?? []
-      if (got.length !== batch.length) return { ok: false, code: 'invalid_response' }
-      for (const e of got) {
-        if (!e.values || e.values.length !== EMBEDDING_DIMENSIONS)
-          return { ok: false, code: 'invalid_response' }
-        vectors.push(e.values)
-      }
-    }
-    return { ok: true, vectors }
-  } catch (err) {
-    return { ok: false, code: mapError(err) }
-  }
-}
-
 // Band model uchun zaxira: Google ro'yxatida "Stable", yangi loyihalar uchun tavsiya qilingan yengil model
 const FALLBACK_MODEL = 'gemini-3.5-flash-lite'
 

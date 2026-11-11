@@ -59,7 +59,7 @@ export function AiLabPage(): React.JSX.Element {
               : t('lab.rag.noVec')
         ]}
         steps={['lab.rag.s1', 'lab.rag.s2', 'lab.rag.s3', 'lab.rag.s4']}
-        params={{ k: info.rag.topK, d: info.rag.maxDistance }}
+        params={{ k: info.rag.topK, d: info.rag.maxDistance, m: info.rag.minMargin }}
         note={t('lab.rag.note')}
       />
 

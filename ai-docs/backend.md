@@ -8,7 +8,8 @@ src/main/
 ├── models/       # SQL queries per table (repository)
 ├── services/     # business logic
 ├── ipc/          # IPC handlers (like Express routes)
-├── ai/           # gemini.ts, classifier.ts (ONNX), embeddings.ts, rag.ts
+├── ai/           # gemini.ts (text + vision), classifier.ts (ONNX), localEmbedder.ts (e5-base ONNX),
+│                 # embeddingMath.ts (e5 prefix, mean pooling), relevance.ts (margin filter), askPrompt.ts
 └── jobs/         # expiryReminder.ts (node-cron)
 ```
 Flow: `renderer → preload (window.api) → ipc → service → model → SQLite`

@@ -20,6 +20,7 @@ export type RagInfo = {
   embeddingModel: string
   dimensions: number
   maxDistance: number
+  minMargin: number // Eng yaqin parcha medianadan kamida shuncha yaqin bo'lishi kerak
   topK: number
 }
 

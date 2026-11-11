@@ -54,6 +54,7 @@ const deps = (over: Partial<AskDeps> = {}): AskDeps => ({
   embedder: fake,
   hasKey: () => true,
   maxDistance: 1, // Soxta embedder masofalari katta → chegara testlarda alohida tekshiriladi
+  minMargin: 0, // Nisbiy farq filtri alohida testda
   generate: async () => ({ ok: false, code: 'unknown' }),
   ...over
 })
@@ -121,13 +122,23 @@ describe('qidiruv', () => {
 })
 
 describe('askQuestion', () => {
-  it("kalit yo'q → oflayn kalit so'z natijalari", async () => {
-    const r = await askQuestion('how often wash face', deps({ hasKey: () => false }))
+  it("kalit yo'q → oflayn semantik natijalar, Gemini chaqirilmaydi", async () => {
+    const generate = vi.fn(async () => ({ ok: false as const, code: 'unknown' as const }))
+    const r = await askQuestion('how often wash face', deps({ hasKey: () => false, generate }))
     expect(r.status).toBe('offline')
     if (r.status === 'offline') {
       expect(r.reason).toBe('no_key')
       expect(r.sources.length).toBeGreaterThan(0)
     }
+    expect(fake.calls).toBeGreaterThan(0) // Lokal embedding ishladi (kalitsiz ham)
+    expect(generate).not.toHaveBeenCalled()
+  })
+  it("kalit yo'q + yaqin parcha yo'q → oflayn, bo'sh natija", async () => {
+    const r = await askQuestion(
+      'How should I start using retinol?',
+      deps({ hasKey: () => false, maxDistance: 0.0001 })
+    )
+    expect(r).toEqual({ status: 'offline', reason: 'no_key', sources: [] })
   })
   it.each([['a'], [{ x: 1 }], ['x'.repeat(501)]])(
     "noto'g'ri savol %# → bad_question",
@@ -198,12 +209,25 @@ describe('askQuestion', () => {
     expect(r).toMatchObject({ status: 'offline', reason: 'busy' })
     if (r.status === 'offline') expect(r.sources).toHaveLength(4)
   })
-  it("embedding xatosi → oflayn kalit so'z natijalari", async () => {
-    const broken: Embedder = { ...fake, embed: async () => ({ ok: false, code: 'rate_limit' }) }
-    const r = await askQuestion('mascara how long', deps({ embedder: broken }))
-    expect(r).toMatchObject({ status: 'offline', reason: 'rate_limit' })
-    if (r.status === 'offline')
-      expect(r.sources.some((s) => s.title.includes('shelf life'))).toBe(true)
+  it("lokal model ishlamasa → kalit so'z qidiruvi bilan javob davom etadi", async () => {
+    const broken: Embedder = { ...fake, embed: async () => ({ ok: false, code: 'unknown' }) }
+    const generate = vi.fn(async () => ({
+      ok: true as const,
+      text: JSON.stringify({ answerable: true, answer: 'About 3 months [1].', citations: [1] })
+    }))
+    const r = await askQuestion('mascara how long', deps({ embedder: broken, generate }))
+    expect(r).toMatchObject({ status: 'answer', mode: 'keyword' })
+    if (r.status === 'answer') expect(r.sources).toHaveLength(1) // Faqat iqtibos qilingan [1] manba
+    expect(generate).toHaveBeenCalledOnce()
+  })
+  it('nisbiy farq yetarli emas → Gemini chaqirilmaydi, not_found', async () => {
+    const generate = vi.fn(async () => ({ ok: false as const, code: 'unknown' as const }))
+    const r = await askQuestion(
+      'How should I start using retinol?',
+      deps({ minMargin: 10, generate }) // Hech qanday parcha bunchalik ajralib turmaydi
+    )
+    expect(r.status).toBe('not_found')
+    expect(generate).not.toHaveBeenCalled()
   })
   it('masofa chegarasidan uzoq → Gemini chaqirilmaydi, not_found', async () => {
     const generate = vi.fn(async () => ({ ok: false as const, code: 'unknown' as const }))

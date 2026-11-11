@@ -498,6 +498,11 @@
     protobufjs "^7.6.5"
     ws "^8.21.0"
 
+"@huggingface/tokenizers@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@huggingface/tokenizers/-/tokenizers-0.2.0.tgz#3913cd936b6e5cbc24e20d0c81dc3ec0f97b8eb0"
+  integrity sha512-LidMHe1FpcSYH4vcSjXooda34pC0M8m1gmDOv7SQi6Iv+ib1zX7J3sHBCC9/3FPCkn2k1b55FneVqMRxrr99pg==
+
 "@humanfs/core@^0.19.2":
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.2.tgz#a8272ca03b2acf492670222b2320b6c421bfde60"

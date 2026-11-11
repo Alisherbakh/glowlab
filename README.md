@@ -20,7 +20,7 @@ Electron · React · TypeScript · SQLite · PyTorch → ONNX · MediaPipe · Op
 | **Face scan**        | 6 visible-skin indicators from a photo or the camera, photo never saved                                                                                        | MediaPipe Face Landmarker (478 points) + OpenCV.js in a worker thread; thresholds shifted by skin type and age range |
 | **Routine**          | Morning / evening routine + **compatibility check** (retinoid in the morning, acids without sunscreen, strong actives stacked, dry / sensitive skin conflicts) | Deliberately rule-based, each rule cites an AAD / FDA page                                                           |
 | **Skin diary**       | Notes, feeling, tags, linked face scans, trend charts                                                                                                          | Hand-written SVG small multiples                                                                                     |
-| **Ask GlowLab**      | Answers skincare questions **only** from a curated knowledge base, with [n] citations                                                                          | RAG: `gemini-embedding-001` + **sqlite-vec** cosine search + grounded generation; SQLite FTS5 offline fallback       |
+| **Ask GlowLab**      | Answers skincare questions **only** from a curated knowledge base, with [n] citations                                                                          | RAG: on-device `multilingual-e5-base` embeddings (ONNX) + **sqlite-vec** cosine search + grounded Gemini generation  |
 | **AI Lab**           | Shows the real model numbers: test accuracy, per-class recall, confusion matrix, Grad-CAM, RAG status                                                          | Reads `metrics.json` written by the evaluation notebook                                                              |
 
 UI languages: Uzbek, Korean, English. Light and dark theme.
@@ -67,7 +67,19 @@ MediaPipe finds the face → a quality gate rejects no face / several faces / sm
 
 ### RAG assistant
 
-26 curated English passages from 18 AAD, FDA and Skin Cancer Foundation pages (`resources/kb/kb.json`) are embedded once with `gemini-embedding-001` (768 dims, L2-normalised) into a `vec0` table. A question is embedded, the 4 nearest passages within cosine distance 0.45 are retrieved, and Gemini must answer only from them with [n] citations. Answers without a valid citation are rejected as "not in the knowledge base". Without a key or offline, FTS5 (BM25 + Porter stemming) shows matching passages. Only the question text is sent, after consent.
+26 curated English passages from 18 AAD, FDA and Skin Cancer Foundation pages (`resources/kb/kb.json`) are embedded **on the computer** with `intfloat/multilingual-e5-base` (ONNX int8, 768 dims, mean pooling + L2 normalisation, run with the same `onnxruntime-node` as the classifier; tokenizer: `@huggingface/tokenizers`) into a `vec0` table. Questions in Uzbek, Korean or English are embedded the same way, so search works offline and without an API key; the question is not sent anywhere for retrieval.
+
+Because e5 distances are tightly packed (even nonsense like "zzzz" lands ~0.25 from every passage), a question counts as covered only if its closest passage is clearly closer than the median passage (margin ≥ 0.023, `src/main/ai/relevance.ts`); passages farther than 0.35 are never used. With a key, Gemini must answer only from the top 4 passages with [n] citations, and answers without a valid citation are rejected as "not in the knowledge base". Without a key, the closest passages are shown instead. Only the question text is sent to Google, after consent, and only to write the answer.
+
+Model choice was measured with `scripts/eval-embeddings.mjs` (24 questions in en/uz/ko + 6 unrelated):
+
+| Model                              | Size   | Top-1     | Top-4     | Unrelated rejected (margin filter) |
+| ---------------------------------- | ------ | --------- | --------- | ---------------------------------- |
+| multilingual-e5-small              | 118 MB | 16/24     | 21/24     | —                                  |
+| **multilingual-e5-base**           | 279 MB | **17/24** | **21/24** | 4/6 (8/10 with nonsense queries)   |
+| paraphrase-multilingual-MiniLM-L12 | 118 MB | 15/24     | 16/24     | —                                  |
+
+English questions: 8/8 top-1 for all models; Uzbek and Korean are harder (e5-base top-4: 7/8 and 6/8). The model file is too large for GitHub, so `yarn fetch:models` downloads it (pinned revision, SHA-256 checked).
 
 ## Privacy
 
@@ -81,6 +93,7 @@ Requirements: macOS (Apple silicon), Node.js 22+, Yarn.
 
 ```bash
 yarn install
+yarn fetch:models   # RAG embedding model (279 MB, not in git)
 yarn dev
 ```
 
@@ -92,11 +105,11 @@ Optional: add a Gemini API key in **Settings**, or for development create `.env`
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `yarn typecheck` | TypeScript (main, preload, shared, renderer, tests)                                                                                                                                                                                                                                 |
 | `yarn lint`      | ESLint + Prettier                                                                                                                                                                                                                                                                   |
-| `yarn test`      | Vitest unit tests (pure logic: dates, vector math, FTS query, compatibility rules)                                                                                                                                                                                                  |
+| `yarn test`      | Vitest unit tests (pure logic: dates, vector math, FTS query, compatibility rules, embedding pooling, relevance filter)                                                                                                                                                             |
 | `yarn test:db`   | Vitest service tests on an in-memory SQLite + sqlite-vec, run inside Electron's Node (same native ABI as the app)                                                                                                                                                                   |
 | `yarn test:e2e`  | Playwright launches the **real Electron app** on a temporary profile (no real data, no API key): onboarding → every page without console errors → add products → routine compatibility warnings appear and disappear → offline Ask → AI Lab numbers → screenshots in light and dark |
 
-Gemini is never called in tests (a fake embedder / generator is injected).
+Gemini is never called in tests (a fake generator is injected). `yarn test:db` also runs the real e5 model on en/uz/ko questions when `yarn fetch:models` has been run (skipped otherwise).
 
 ## Build
 
@@ -122,6 +135,7 @@ e2e            Playwright tests for the Electron app
 
 - Product images (CC BY 4.0, Roboflow Universe): [skincare-dataset](https://universe.roboflow.com/visioncomputer/skincare-dataset) by `visioncomputer` and [makeup-products-detection](https://universe.roboflow.com/first-work-nnlbg/makeup-products-detection) by `first-work-nnlbg`.
 - Face landmarks: Google MediaPipe Face Landmarker model.
+- Text embeddings: [intfloat/multilingual-e5-base](https://huggingface.co/intfloat/multilingual-e5-base) (MIT), ONNX int8 export by [Xenova](https://huggingface.co/Xenova/multilingual-e5-base); tokenizer [@huggingface/tokenizers](https://github.com/huggingface/tokenizers.js).
 - Knowledge base: short paraphrases of public pages by the American Academy of Dermatology, U.S. FDA and the Skin Cancer Foundation; every passage links to its source.
 
 ## Author

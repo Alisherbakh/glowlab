@@ -26,6 +26,8 @@
 - [x] Stage 14 check + commit (23d541f).
 - [ ] Stage 15 on Mac: `yarn install` → `yarn typecheck` → `yarn lint` → `yarn test` → `yarn test:db` → `yarn test:e2e` → `yarn build:mac` → open the .dmg, install, smoke test (onboarding, add product, AI Lab, Ask offline) → commit → merge develop → master.
 
+- [ ] Local embeddings check (2026-11-11): `yarn install` → `yarn fetch:models` (279 MB) → `yarn dev` → Ask in uz / ko / en with and without the key; nonsense ("zzzz qqqq") → no matches; terminal `[ask] margin …` lines look sane; AI Lab shows `intfloat/multilingual-e5-base`. Optional: `GEMINI_API_KEY=… node scripts/eval-embeddings.mjs --gemini --verbose` for the Gemini baseline. `yarn build:mac` → the model is inside the .app (`Contents/Resources/app.asar.unpacked/resources/models/embedding/`). Then commit: `feat(rag): on-device multilingual e5 embeddings`.
+
 ## Next
 ✅ All 15 stages coded. After the Mac run: optional serum dataset cleanup + retrain, face metric calibration, notarisation if the app is shared.
 
