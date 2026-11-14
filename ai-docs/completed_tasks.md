@@ -135,3 +135,12 @@ Format: `YYYY-MM-DD — Part/Stage — what was done`
   - Code: migration `005_kb_titles.sql` (`kb_chunks.alt_titles` JSON), `vec_kb` now `chunk_id` metadata column (several vectors per chunk), `searchVectors` dedupes to the closest vector per chunk, `documentVariants()` in `ai/embeddingMath.ts`, `kb.service` embed key includes `DOC_FORMAT` (old vectors rebuilt automatically), zod: optional one-line `titles.uz/ko`. `MIN_MARGIN` 0.023 → 0.026.
   - Tests: unit 56/56, db 47/47 (78 vectors → 26 distinct hits; kb.json without titles still works; multi-line title rejected; real model: the Mac Korean question → sunscreen-reapply, "Retinolni qanday boshlash kerak?" → retinoid-how; nonsense still rejected), E2E 7/7, typecheck ✅ lint ✅ build ✅. README RAG section updated.
 
+
+## 2026-11-14
+- Release check (all on the Mac): typecheck ✅ lint ✅ unit 56/56 ✅ db 47/47 ✅ E2E 7/7 ✅ `yarn audit` 0 vulnerabilities ✅, no secrets in git history ✅. Prettier warnings only in docs / skills / model JSON (not app code).
+  - `yarn build:mac` → `dist/glowlab-1.0.0.dmg` (431 MB, includes e5-base), `hdiutil verify` VALID. asar holds only `out/`, `resources/`, `package.json` (no .env, tests, ml, docs).
+  - **Bug fixed:** `mac.extendInfo` was a YAML list → ignored → camera prompt showed Electron's default "This app needs access to the camera". Now a map → our privacy text is in `Info.plist`.
+  - **Signing:** was unsigned with a broken signature (downloaded copies would show "damaged"). Now `mac.identity: '-'` (ad-hoc) + `com.apple.security.cs.disable-library-validation` entitlement (needed so onnxruntime / sqlite-vec dylibs load under hardened runtime). `codesign --verify --deep --strict` ✅, bundle id `com.alisher.glowlab`.
+  - Packaged app smoke run on a temp profile (`--user-data-dir`): migrations 001→005, KB seeded, sqlite-vec loaded, e5 model built 78 vectors, app stays running.
+  - README: "Installing the .dmg" section (Open Anyway / `xattr -cr`).
+  - Manual check by Alisher on the installed .dmg: label scan with key, photo suggestion, camera face scan (new camera text) — all OK.

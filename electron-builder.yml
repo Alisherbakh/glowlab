@@ -29,8 +29,11 @@ nsis:
   createDesktopShortcut: always
 mac:
   entitlementsInherit: build/entitlements.mac.plist
+  # extendInfo ro'yxat emas, map bo'lishi kerak — aks holda Electron'ning standart matni chiqadi
   extendInfo:
-    - NSCameraUsageDescription: GlowLab uses the camera only for local skin analysis. Photos never leave your computer.
+    NSCameraUsageDescription: GlowLab uses the camera only for local skin analysis. Photos never leave your computer.
+  # Apple Developer ID yo'q → ad-hoc imzo: yuklab olingan ilova "shikastlangan" emas, "noma'lum dasturchi" deb ko'rinadi
+  identity: '-'
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}

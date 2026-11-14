@@ -8,6 +8,9 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>
+    <!-- Ad-hoc imzoda onnxruntime / sqlite-vec .dylib'lari yuklanishi uchun kerak -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
     <key>com.apple.security.device.camera</key>
     <true/>
   </dict>

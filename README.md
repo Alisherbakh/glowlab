@@ -124,10 +124,20 @@ Gemini is never called in tests (a fake generator is injected). `yarn test:db` a
 ## Build
 
 ```bash
-yarn build:mac   # → dist/glowlab-1.0.0.dmg (not notarised)
+yarn build:mac   # → dist/glowlab-1.0.0.dmg (ad-hoc signed, not notarised)
 ```
 
 The mac build keeps only the darwin onnxruntime binaries; `sqlite-vec`, onnxruntime and `resources/` are unpacked from the asar so native libraries and models load.
+
+### Installing the .dmg
+
+The app is ad-hoc signed but not notarised (no Apple Developer ID), so macOS will warn on first launch:
+
+1. Open `glowlab-1.0.0.dmg` and drag **GlowLab** to Applications.
+2. Open it once → macOS says it cannot verify the developer → **System Settings → Privacy & Security → Open Anyway**.
+3. If macOS says the app "is damaged", run `xattr -cr /Applications/GlowLab.app` and open it again.
+
+Apple silicon Macs only (arm64).
 
 ## Project structure
 
